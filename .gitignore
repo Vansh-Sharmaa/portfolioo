@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# local research / scraping workspace (large, not part of the project)
+_research/
+.workbuddy-ai/
+
+# logs
+*.log
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
