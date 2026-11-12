@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Vansh Sharma — AI / GenAI Engineer (3D Portfolio)</title>
+  <meta name="description" content="Vansh Sharma — AI &amp; GenAI engineer. Production LLM systems, QLoRA fine-tuning, RAG pipelines and multi-agent workflows.">
+  <meta name="theme-color" content="#050608">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="preload" href="/assets/fonts/OffBit-DotBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/Doto-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="is-loading">
+
+  <!-- 3D WebGL / WebGPU Viewport -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Virtual Scroll Track (Flight Runway) -->
+  <div class="scroll-track" aria-hidden="true"></div>
+
+  <!-- HUD Overlay Layer -->
+  <div class="hud-overlay">
+    <!-- Corner Brackets -->
+    <div class="corner-bracket bracket-tl" aria-hidden="true"></div>
+    <div class="corner-bracket bracket-tr" aria-hidden="true"></div>
+    <div class="corner-bracket bracket-bl" aria-hidden="true"></div>
+    <div class="corner-bracket bracket-br" aria-hidden="true"></div>
+
+    <!-- Header Navigation -->
+    <header class="hud-header hud-interactive">
+      <div class="hud-brand">
+        <span data-scramble-text>VANSH SHARMA</span>
+        <div class="hud-status-badge">
+          <span class="status-dot"></span>
+          <span>AVAILABLE FOR HIRE</span>
+        </div>
+      </div>
+      <ul class="hud-meta-links">
+        <li><a href="#work" data-scramble-text>// 01 WORK</a></li>
+        <li><a href="#about" data-scramble-text>// 02 ABOUT</a></li>
+        <li><a href="https://github.com" target="_blank" rel="noopener" data-scramble-text>// 03 GITHUB</a></li>
+      </ul>
+    </header>
+
+    <!-- Stage Panels (Fade in & out according to 3D Camera Waypoints) -->
+    <main class="hud-stage">
+      <!-- Section 0: Hero -->
+      <section class="hud-section is-active" data-hud-section="hero" id="heroContent">
+        <h1 class="hero-headline" data-scramble-text>AI / GENAI ENGINEER</h1>
+        <p class="hero-subhead" data-scramble-text>
+          ARCHITECTING PRODUCTION-GRADE LLM SYSTEMS, HIGH-PRECISION RAG PIPELINES, AND AUTONOMOUS MULTI-AGENT SWARMS THAT ACTUALLY SHIP.
+        </p>
+        <div class="hero-tags hud-interactive">
+          <span class="badge" data-scramble-text>LANGGRAPH</span>
+          <span class="badge" data-scramble-text>QLORA FINE-TUNING</span>
+          <span class="badge" data-scramble-text>VECTOR RETRIEVAL</span>
+          <span class="badge" data-scramble-text>MULTI-AGENT WORKFLOWS</span>
+          <span class="badge" data-scramble-text>FASTAPI</span>
+        </div>
+      </section>
+
+      <!-- Section 1: Project 1 -->
+      <section class="hud-section" data-hud-section="project-1">
+        <div class="project-card hud-interactive">
+          <div class="project-number" data-scramble-text>PROJECT // 01</div>
+          <h2 class="project-title" data-scramble-text>JOB AGENT</h2>
+          <p class="project-desc">
+            Autonomous job discovery and application orchestrator. Scrapes verified listings, performs semantic compatibility matching against candidate resumes, and dispatches real-time WhatsApp telemetry.
+          </p>
+          <div class="project-tech">
+            <span class="badge">PYTHON</span>
+            <span class="badge">FASTAPI</span>
+            <span class="badge">LLM PROMPT CHAIN</span>
+            <span class="badge">WHATSAPP API</span>
+          </div>
+          <a href="#" class="btn-project" data-scramble-text>EXPLORE REPO &rarr;</a>
+        </div>
+      </section>
+
+      <!-- Section 2: Project 2 -->
+      <section class="hud-section" data-hud-section="project-2">
+        <div class="project-card hud-interactive">
+          <div class="project-number" data-scramble-text>PROJECT // 02</div>
+          <h2 class="project-title" data-scramble-text>RESEARCHMIND</h2>
+          <p class="project-desc">
+            Distributed multi-agent research collective. Orchestrates recursive web exploration, cross-checking fact verification, and structured executive synthesis across heterogeneous LLM providers.
+          </p>
+          <div class="project-tech">
+            <span class="badge">LANGGRAPH</span>
+            <span class="badge">LANGCHAIN</span>
+            <span class="badge">TAVILY API</span>
+            <span class="badge">CLAUDE 3.5</span>
+          </div>
+          <a href="#" class="btn-project" data-scramble-text>EXPLORE REPO &rarr;</a>
+        </div>
+      </section>
+
+      <!-- Section 3: Project 3 -->
+      <section class="hud-section" data-hud-section="project-3">
+        <div class="project-card hud-interactive">
+          <div class="project-number" data-scramble-text>PROJECT // 03</div>
+          <h2 class="project-title" data-scramble-text>LEXAI</h2>
+          <p class="project-desc">
+            Production legal document intelligence system. Combines hybrid dense-sparse vector search with reranking to deliver hallucination-free contract clause analysis with verified citations.
+          </p>
+          <div class="project-tech">
+            <span class="badge">FAISS</span>
+            <span class="badge">CROSS-ENCODERS</span>
+            <span class="badge">EMBEDDINGS</span>
+            <span class="badge">REACT</span>
+          </div>
+          <a href="#" class="btn-project" data-scramble-text>EXPLORE REPO &rarr;</a>
+        </div>
+      </section>
+
+      <!-- Section 4: Contact -->
+      <section class="hud-section" data-hud-section="contact">
+        <div class="project-card hud-interactive" style="text-align: center;">
+          <div class="project-number" data-scramble-text>TRANSMISSION // 04</div>
+          <h2 class="project-title" data-scramble-text>LET'S BUILD TOGETHER</h2>
+          <p class="project-desc" style="margin: 0 auto 1.5rem auto;">
+            Available for full-time engineering roles, AI consultancy, and high-impact freelance projects.
+          </p>
+          <a href="mailto:vansh@example.com" class="btn-project" data-scramble-text>INITIATE CONTACT &rarr;</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom HUD Footer -->
+    <footer class="hud-footer">
+      <div class="hud-scroll-readout">
+        <span>CAMERA TRAJECTORY</span>
+        <div class="scroll-indicator-bar" aria-hidden="true">
+          <div class="scroll-indicator-fill"></div>
+        </div>
+        <span id="hudScrollPct">0%</span>
+      </div>
+      <div>
+        <span>COORDINATES: 28.6139° N / 77.2090° E</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Preloader & Gyroscope Permission Gate -->
+  <div class="preloader" id="preloader" role="status" aria-label="Loading System">
+    <div class="preloader-box">
+      <div class="preloader-label" id="loadWord">INITIALIZING THREE.JS ENGINE</div>
+      <div class="preloader-track">
+        <div class="preloader-bar" id="loadBar"></div>
+      </div>
+      <div class="preloader-pct" id="loadPct">000%</div>
+
+      <div class="gate" id="gate" role="dialog" aria-modal="true" aria-hidden="true">
+        <p class="gate-text">
+          THIS EXPERIENCE UTILIZES<br>
+          <em>MOTION &amp; SPATIAL ORIENTATION</em><br>
+          FOR INTERACTIVE 3D PARALLAX DEPTH.
+        </p>
+        <div class="gate-actions">
+          <button type="button" id="btnMotionAllow" class="btn-gate btn-gate-solid">ALLOW</button>
+          <button type="button" id="btnMotionDecline" class="btn-gate btn-gate-ghost">PROCEED</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
