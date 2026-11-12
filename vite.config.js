@@ -8,6 +8,8 @@ export default defineConfig({
       ignored: [
         '**/_research/**',
         '**/resourses/**',
+        '**/rebuild/**',
+        '**/*chrome*/**',
         '**/.workbuddy-ai/**',
         '**/chrome-profile/**',
         '**/node_modules/**'
