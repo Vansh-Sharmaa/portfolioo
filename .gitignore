@@ -6,6 +6,7 @@ dist/
 
 # local research / scraping workspace (large, not part of the project)
 _research/
+resourses/
 .workbuddy-ai/
 
 # logs

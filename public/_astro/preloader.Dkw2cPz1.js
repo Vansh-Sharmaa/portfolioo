@@ -1,0 +1,1 @@
+import{s as t,o as r}from"./store.L6fLKUio.js";const e={progress:0,isReady:!1,isWarm:!1,warmProgress:0},a=t({...e,isGateOpen:!1,isMotionPending:!1});function i(){a.update(e)}function p(){a.update({isGateOpen:!0})}function d(o,s){r(a,o,s)}export{d as a,p as o,a as p,i as r};

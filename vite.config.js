@@ -7,6 +7,7 @@ export default defineConfig({
     watch: {
       ignored: [
         '**/_research/**',
+        '**/resourses/**',
         '**/.workbuddy-ai/**',
         '**/chrome-profile/**',
         '**/node_modules/**'
