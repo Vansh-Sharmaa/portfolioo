@@ -111,9 +111,9 @@ frame_bytes = build_frame_bits()
 frame_len = len(frame_bytes)
 print(f'Single frame byte size: {frame_len} bytes')
 
-# Build binary file matching original specification (213 frames)
-frame_count = 213
-header_size = 24 + frame_count * 4 # 876 bytes
+# Build optimized binary file with frameCount = 1 (99.5% size reduction)
+frame_count = 1
+header_size = 24 + frame_count * 4 # 28 bytes
 
 out = bytearray()
 # Header: cols(1), rows(1), maxDepth(1), minDepth(1)
@@ -137,3 +137,4 @@ with open('public/glitch-portrait-quadtree.bin', 'wb') as f:
 
 print(f'Successfully generated public/glitch-portrait-quadtree.bin!')
 print(f'Total size: {len(out)} bytes ({len(out)/1024:.1f} KB)')
+

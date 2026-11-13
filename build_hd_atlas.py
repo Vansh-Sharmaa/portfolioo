@@ -129,7 +129,7 @@ atlas = Image.new('RGB', (304, 152), (0, 0, 0))
 atlas.paste(Image.fromarray(color_arr.astype(np.uint8)), (0, 0))
 atlas.paste(depth_img.convert('RGB'), (153, 0))
 
-atlas.save('public/vansh-portrait-atlas.png')
-atlas.save('vansh-portrait-atlas.png')
+atlas.save('public/vansh-portrait-atlas.png', optimize=True, compress_level=9)
+atlas.save('vansh-portrait-atlas.png', optimize=True, compress_level=9)
 
 print('Cleaned 3D Atlas generated! Background wall on left completely removed.')

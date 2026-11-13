@@ -1,6 +1,56 @@
 import { defineConfig } from 'vite';
+import fs from 'fs';
+import path from 'path';
+import zlib from 'zlib';
+
+function compressPlugin() {
+  return {
+    name: 'vite-plugin-static-precompress',
+    apply: 'build',
+    closeBundle() {
+      const distDir = path.resolve(process.cwd(), 'dist');
+      if (!fs.existsSync(distDir)) return;
+
+      const compressFile = (filePath) => {
+        const ext = path.extname(filePath).toLowerCase();
+        if (!['.js', '.css', '.html', '.svg', '.json', '.glb', '.vsplat', '.wasm', '.ktx2'].includes(ext)) return;
+
+        const content = fs.readFileSync(filePath);
+        if (content.length < 512) return; // skip tiny files
+
+        // Gzip compression
+        const gzipped = zlib.gzipSync(content, { level: 9 });
+        fs.writeFileSync(`${filePath}.gz`, gzipped);
+
+        // Brotli compression
+        const brotli = zlib.brotliCompressSync(content, {
+          params: {
+            [zlib.constants.BROTLI_PARAM_QUALITY]: zlib.constants.BROTLI_MAX_QUALITY
+          }
+        });
+        fs.writeFileSync(`${filePath}.br`, brotli);
+      };
+
+      const traverse = (dir) => {
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const entry of entries) {
+          const fullPath = path.join(dir, entry.name);
+          if (entry.isDirectory()) {
+            traverse(fullPath);
+          } else if (entry.isFile()) {
+            compressFile(fullPath);
+          }
+        }
+      };
+
+      traverse(distDir);
+      console.log('✓ Production assets pre-compressed with Gzip & Brotli (Max Quality)');
+    }
+  };
+}
 
 export default defineConfig({
+  plugins: [compressPlugin()],
   server: {
     host: '127.0.0.1',
     port: 5173,
