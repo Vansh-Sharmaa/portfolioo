@@ -145,3 +145,4 @@ atlas.save('vansh-portrait-atlas.png')
 
 print('High-Definition 3D Facial Micro-Relief Atlas generated successfully!')
 print(f'Depth range: {depth[person_mask].min():.3f} to {depth[person_mask].max():.3f}, mean: {depth[person_mask].mean():.3f}')
+
