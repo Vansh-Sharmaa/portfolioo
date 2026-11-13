@@ -12,7 +12,9 @@ export default defineConfig({
         '**/*chrome*/**',
         '**/.workbuddy-ai/**',
         '**/chrome-profile/**',
-        '**/node_modules/**'
+        '**/node_modules/**',
+        '**/*.png',
+        '**/*.jpg'
       ]
     }
   }
