@@ -121,3 +121,4 @@ atlas.save('vansh-portrait-atlas.png', optimize=True, compress_level=9)
 
 print('Classical Marble Bust 3D Atlas generated successfully!')
 print(f'Depth range: {depth[statue_mask].min():.3f} to {depth[statue_mask].max():.3f}, mean: {depth[statue_mask].mean():.3f}')
+
