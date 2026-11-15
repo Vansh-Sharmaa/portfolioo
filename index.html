@@ -18,6 +18,11 @@
       if (ifr && ifr.contentWindow) {
         ifr.contentWindow.postMessage({ type: 'forwardScroll', deltaY: e.deltaY }, '*');
       }
+    } else if (current === 'monitor') {
+      const ifr = document.querySelector('iframe');
+      if (ifr && ifr.contentWindow) {
+        ifr.contentWindow.postMessage({ type: 'forwardScroll', deltaY: e.deltaY }, '*');
+      }
     }
   }, { passive: true });
 })();
