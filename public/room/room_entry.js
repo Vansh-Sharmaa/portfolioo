@@ -278,8 +278,8 @@ class RoomIntro {
     const btn = document.getElementById('room-theme-btn');
     if (btn) {
       btn.innerHTML = isDark ? '☀ LIGHT MODE' : '☾ DARK MODE';
-      btn.style.color = isDark ? '#00ffaa' : '#ffffff';
-      btn.style.borderColor = isDark ? 'rgba(0,255,170,0.4)' : '#333333';
+      btn.style.color = '#ffffff';
+      btn.style.borderColor = isDark ? 'rgba(255,255,255,0.6)' : '#333333';
     }
   }
 
@@ -295,6 +295,29 @@ class RoomIntro {
     this.screenCtx = this.screenCanvas.getContext('2d');
     this.screenTexture = new THREE.CanvasTexture(this.screenCanvas);
     this.screenTexture.colorSpace = THREE.SRGBColorSpace;
+
+    // Preload authentic high-fidelity captures of every portfolio view
+    this.screens = {};
+    const screenMap = {
+      hero: '/room/screens/hero.jpg',
+      netsentinel: '/room/screens/netsentinel.jpg',
+      filegenie: '/room/screens/filegenie.jpg',
+      querygenie: '/room/screens/querygenie.jpg',
+      lexai: '/room/screens/lexai.jpg',
+      intellecta: '/room/screens/lexai.jpg',
+      about: '/room/screens/about.jpg',
+      contact: '/room/screens/contact.jpg'
+    };
+
+    for (const [key, src] of Object.entries(screenMap)) {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        this.screens[key] = img;
+        this.screenTexture.needsUpdate = true;
+      };
+      this.screens[key] = img;
+    }
   }
 
   updateScreenTexture(time) {
@@ -303,350 +326,63 @@ class RoomIntro {
     const w = this.screenCanvas.width;
     const h = this.screenCanvas.height;
 
-    // Show vintage Netscape ONLY if user has NEVER entered the portfolio yet and is not hovering
-    const showInitialNetscape = !this.hasEntered && !this.hovered && this.state !== 'monitor';
+    // Seamless session continuity:
+    // When returning to desk, show the EXACT section the user was actively browsing!
+    let secKey = (this.activeSession && this.activeSession.section)
+      ? this.activeSession.section.toLowerCase()
+      : 'hero';
 
-    if (showInitialNetscape) {
-      // =========================================================================
-      // INITIAL RESTING STATE: ORIGINAL VINTAGE NETSCAPE 98 (Before first entrance)
-      // =========================================================================
-      
-      // 1. Windows 95/98 Window Outer Frame
-      ctx.fillStyle = '#c0c0c0';
-      ctx.fillRect(0, 0, w, h);
+    if (!this.screens[secKey]) {
+      secKey = 'hero';
+    }
 
-      // Outer 3D Bevel
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, w, 3);
-      ctx.fillRect(0, 0, 3, h);
-      ctx.fillStyle = '#808080';
-      ctx.fillRect(0, h - 3, w, 3);
-      ctx.fillRect(w - 3, 0, 3, h);
-
-      // 2. Classic Windows Gradient Title Bar
-      const titleGrad = ctx.createLinearGradient(4, 4, w - 8, 4);
-      titleGrad.addColorStop(0, '#000080');
-      titleGrad.addColorStop(1, '#1084d0');
-      ctx.fillStyle = titleGrad;
-      ctx.fillRect(4, 4, w - 8, 36);
-
-      // Title text
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 20px "Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('🗔  Vansh Sharma — Netscape Portfolio [v2.0]', 14, 29);
-
-      // 3. Window Buttons (_ □ ✕)
-      const drawWinBtn = (x, sym) => {
-        ctx.fillStyle = '#c0c0c0';
-        ctx.fillRect(x, 8, 28, 26);
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(x, 8, 28, 2);
-        ctx.fillRect(x, 8, 2, 26);
-        ctx.fillStyle = '#404040';
-        ctx.fillRect(x, 32, 28, 2);
-        ctx.fillRect(x + 26, 8, 2, 26);
-        ctx.fillStyle = '#000000';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(sym, x + 14, 26);
-        ctx.textAlign = 'left';
-      };
-      drawWinBtn(w - 96, '_');
-      drawWinBtn(w - 64, '□');
-      drawWinBtn(w - 32, '✕');
-
-      // 4. Menu Bar
-      ctx.fillStyle = '#000000';
-      ctx.font = '16px "Segoe UI", Tahoma, sans-serif';
-      ctx.fillText('File    Edit    View    Go    Bookmarks    Options    Directory    Help', 16, 62);
-      ctx.fillStyle = '#808080';
-      ctx.fillRect(4, 72, w - 8, 1);
-
-      // 5. URL Address Bar
-      ctx.fillStyle = '#000000';
-      ctx.font = 'bold 15px "Segoe UI", sans-serif';
-      ctx.fillText('Location:', 14, 96);
-      
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(90, 80, w - 104, 25);
-      ctx.fillStyle = '#404040';
-      ctx.fillRect(90, 80, w - 104, 2);
-      ctx.fillRect(90, 80, 2, 25);
-      ctx.fillStyle = '#000080';
-      ctx.font = '15px monospace';
-      ctx.fillText('https://vansh-sharmaa.github.io/portfolio3d/', 100, 97);
-
-      // 6. Browser Content Area
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(6, 110, w - 12, h - 142);
-      ctx.fillStyle = '#404040';
-      ctx.fillRect(6, 110, w - 12, 2);
-      ctx.fillRect(6, 110, 2, h - 142);
-
-      // Left Sidebar Column
-      ctx.fillStyle = '#f5f5f5';
-      ctx.fillRect(8, 112, 230, h - 146);
-      ctx.fillStyle = '#808080';
-      ctx.fillRect(238, 112, 1, h - 146);
-
-      ctx.fillStyle = '#000000';
-      ctx.font = 'bold 28px "Times New Roman", Times, serif';
-      ctx.fillText('Vansh', 26, 160);
-      ctx.fillText('Sharma', 26, 192);
-
-      ctx.font = 'italic 16px "Times New Roman", serif';
-      ctx.fillStyle = '#555555';
-      ctx.fillText('Software ' + new Date().getFullYear(), 26, 218);
-
-      const links = [
-        '• HOME',
-        '• ABOUT',
-        '• EXPERIENCE',
-        '• PROJECTS',
-        '   > NETSENTINEL',
-        '   > FILEGENIE',
-        '   > QUERYGENIE',
-        '   > LEXAI',
-        '• CONTACT'
-      ];
-      let linkY = 260;
-      ctx.font = 'bold 15px "Segoe UI", Tahoma, sans-serif';
-      for (const link of links) {
-        ctx.fillStyle = link.startsWith(' ') ? '#0066cc' : '#0000ee';
-        ctx.fillText(link, 26, linkY);
-        linkY += 26;
-      }
-
-      // Right Main Article Pane
-      const mainX = 260;
-      ctx.fillStyle = '#0000ee';
-      ctx.font = '15px "Times New Roman", serif';
-      ctx.fillText('• [3D WebGPU Edition]   • [Full Screen Mode]   • [GitHub Portfolio]', mainX, 145);
-      ctx.fillStyle = '#808080';
-      ctx.fillRect(mainX, 155, w - mainX - 30, 1);
-
-      ctx.fillStyle = '#000000';
-      ctx.font = 'bold 30px "Times New Roman", serif';
-      ctx.fillText('NetSentinel: Autonomous NOC Engine', mainX, 198);
-
-      ctx.font = '16px "Times New Roman", serif';
-      ctx.fillStyle = '#222222';
-      ctx.fillText('Production-ready Network Operations Center platform with real-time telemetry,', mainX, 230);
-      ctx.fillText('topology-aware alarm correlation, and automated ITIL incident dispatch.', mainX, 252);
-      ctx.fillText('Architected using FastAPI, Python, Docker containers, and high-throughput pipelines.', mainX, 274);
-
-      // Interactive Demo Box
-      const boxW = w - mainX - 50;
-      const boxH = 220;
-      ctx.fillStyle = '#08140e';
-      ctx.fillRect(mainX, 295, boxW, boxH);
-      ctx.strokeStyle = '#00ff88';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(mainX, 295, boxW, boxH);
-
-      ctx.fillStyle = 'rgba(0, 255, 136, 0.08)';
-      for (let gy = 295; gy < 295 + boxH; gy += 16) {
-        ctx.fillRect(mainX, gy, boxW, 1);
-      }
-      for (let gx = mainX; gx < mainX + boxW; gx += 20) {
-        ctx.fillRect(gx, 295, 1, boxH);
-      }
-
-      ctx.strokeStyle = '#00ff88';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      for (let x = 0; x < boxW; x += 4) {
-        const y = Math.sin((x * 0.04) + time * 4.0) * 24 +
-                  Math.sin((x * 0.09) - time * 2.5) * 12;
-        if (x === 0) ctx.moveTo(mainX + x, 295 + boxH / 2 + y);
-        else ctx.lineTo(mainX + x, 295 + boxH / 2 + y);
-      }
-      ctx.stroke();
-
-      const calloutW = boxW - 60;
-      const calloutH = 46;
-      const calloutX = mainX + 30;
-      const calloutY = 295 + boxH / 2 - 23;
-      ctx.fillStyle = 'rgba(0, 255, 170, 0.9)';
-      ctx.fillRect(calloutX, calloutY, calloutW, calloutH);
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(calloutX, calloutY, calloutW, calloutH);
-
-      ctx.fillStyle = '#000000';
-      ctx.font = 'bold 18px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('▶  HOVER DISPLAY TO ENTER 3D CRT PORTFOLIO', calloutX + calloutW / 2, calloutY + 28);
-
-      ctx.fillStyle = '#00ffaa';
-      ctx.font = '13px monospace';
-      ctx.textAlign = 'left';
-      ctx.fillText('> NOC TELEMETRY: ACTIVE // TOPOLOGY MAP RESOLVED 100%', mainX + 16, 295 + boxH - 14);
-
-      // Bottom Status Bar
-      ctx.fillStyle = '#c0c0c0';
-      ctx.fillRect(4, h - 30, w - 8, 26);
-      ctx.fillStyle = '#808080';
-      ctx.fillRect(4, h - 30, w - 8, 2);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(4, h - 4, w - 8, 2);
-      ctx.fillStyle = '#333333';
-      ctx.font = '14px "Segoe UI", sans-serif';
-      ctx.fillText('✓  Document: Done (100% loaded) | Hover Computer to Enter', 16, h - 12);
-      ctx.textAlign = 'right';
-      ctx.fillText('🔏 SSL Encrypted [WebGPU]', w - 24, h - 12);
-      ctx.textAlign = 'left';
-
+    const img = this.screens[secKey];
+    if (img && img.complete && img.naturalWidth > 0) {
+      // Draw actual live portfolio view directly onto 3D PC monitor
+      ctx.drawImage(img, 0, 0, w, h);
+    } else if (this.screens.hero && this.screens.hero.complete && this.screens.hero.naturalWidth > 0) {
+      ctx.drawImage(this.screens.hero, 0, 0, w, h);
     } else {
-      // =========================================================================
-      // REAL-TIME SYNCHRONIZED CRT DISPLAY (Preserves active session without breaking flow!)
-      // =========================================================================
-      
-      const session = this.activeSession;
-
-      // 1. Deep black CRT glass
-      ctx.fillStyle = '#020403';
+      ctx.fillStyle = this.theme === 'dark' ? '#0a0c10' : '#f0f0f0';
       ctx.fillRect(0, 0, w, h);
+    }
 
-      // 2. Phosphor Scanlines
-      ctx.fillStyle = 'rgba(0, 255, 136, 0.05)';
-      for (let y = 0; y < h; y += 4) {
-        ctx.fillRect(0, y, w, 2);
+    // Subtle physical CRT glass curvature vignette
+    const vigGrad = ctx.createRadialGradient(w / 2, h / 2, w * 0.35, w / 2, h / 2, w * 0.72);
+    vigGrad.addColorStop(0, 'rgba(255,255,255,0)');
+    vigGrad.addColorStop(1, 'rgba(0,0,0,0.14)');
+    ctx.fillStyle = vigGrad;
+    ctx.fillRect(0, 0, w, h);
+
+    // Elegant, non-intrusive hover badge (clean monochrome in portfolio typography)
+    if (this.hovered && this.state === 'desk') {
+      const pillW = 460;
+      const pillH = 50;
+      const pillX = (w - pillW) / 2;
+      const pillY = h - 100;
+
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+      if (typeof ctx.roundRect === 'function') {
+        ctx.beginPath();
+        ctx.roundRect(pillX, pillY, pillW, pillH, 25);
+        ctx.fill();
+      } else {
+        ctx.fillRect(pillX, pillY, pillW, pillH);
       }
 
-      // 3. CRT Screen Border & Glass Glow
-      ctx.strokeStyle = 'rgba(0, 255, 170, 0.4)';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(8, 8, w - 16, h - 16);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.lineWidth = 1.5;
+      if (typeof ctx.roundRect === 'function') {
+        ctx.stroke();
+      } else {
+        ctx.strokeRect(pillX, pillY, pillW, pillH);
+      }
 
-      // Subtle CRT scan beam
-      const scanY = (Math.floor(time * 350) % h);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.fillRect(8, scanY, w - 16, 8);
-
-      // 4. Header Bar
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 24px monospace';
-      ctx.textAlign = 'left';
-      ctx.fillText('VANSH SHARMA', 40, 58);
-
-      ctx.font = '18px monospace';
-      ctx.textAlign = 'right';
-      const headerLabel = session.num ? `[ ${session.num} // ${session.section} ]` : "LET'S TALK   MENU ☰";
-      ctx.fillText(headerLabel, w - 40, 58);
-
-      // 5. Main Hero/Project Content in Real Time
-      ctx.textAlign = 'left';
-      ctx.font = 'bold 50px monospace';
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = 'rgba(0, 255, 170, 0.7)';
-      ctx.shadowBlur = 12;
-      ctx.fillText(session.title, 40, 160);
-      ctx.shadowBlur = 0;
-
-      // Subtitle / Tagline
-      ctx.font = '20px monospace';
-      ctx.fillStyle = '#00ffaa';
-      ctx.fillText(session.subtitle || '// PORTFOLIO ©2026', 40, 200);
-
-      // Role tag if project
-      if (session.role) {
-        ctx.font = 'bold 16px monospace';
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText(`ROLE: ${session.role}`, 40, 235);
-      }
-
-      // 6. Interactive Telemetry / Description Frame
-      const cardY = session.role ? 260 : 230;
-      const cardH = 220;
-      ctx.fillStyle = 'rgba(0, 20, 12, 0.7)';
-      ctx.fillRect(40, cardY, w - 80, cardH);
-      ctx.strokeStyle = 'rgba(0, 255, 170, 0.35)';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(40, cardY, w - 80, cardH);
-
-      // Animated oscilloscope / radar inside frame
-      ctx.strokeStyle = 'rgba(0, 255, 170, 0.5)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      for (let x = 0; x < w - 120; x += 4) {
-        const y = Math.sin((x * 0.03) + time * 5.0) * 16 +
-                  Math.sin((x * 0.08) - time * 2.0) * 8;
-        if (x === 0) ctx.moveTo(60 + x, cardY + 50 + y);
-        else ctx.lineTo(60 + x, cardY + 50 + y);
-      }
-      ctx.stroke();
-
-      // Description text wrapped nicely
-      ctx.font = '18px monospace';
-      ctx.fillStyle = '#e0e0e0';
-      const words = session.desc.split(' ');
-      let line = '';
-      let textY = cardY + 110;
-      for (const word of words) {
-        const testLine = line + (line ? ' ' : '') + word;
-        if (ctx.measureText(testLine).width > w - 130) {
-          ctx.fillText(line, 60, textY);
-          line = word;
-          textY += 26;
-        } else {
-          line = testLine;
-        }
-      }
-      if (line) ctx.fillText(line, 60, textY);
-
-      // Tags badges
-      if (session.tags && session.tags.length > 0) {
-        let tagX = 60;
-        ctx.font = 'bold 13px monospace';
-        for (const tag of session.tags) {
-          const tw = ctx.measureText(tag).width + 16;
-          ctx.fillStyle = 'rgba(0, 255, 170, 0.15)';
-          ctx.fillRect(tagX, cardY + cardH - 35, tw, 22);
-          ctx.strokeStyle = '#00ffaa';
-          ctx.lineWidth = 1;
-          ctx.strokeRect(tagX, cardY + cardH - 35, tw, 22);
-          ctx.fillStyle = '#00ffaa';
-          ctx.fillText(tag, tagX + 8, cardY + cardH - 19);
-          tagX += tw + 10;
-        }
-      }
-
-      // 7. Interactive Action Badge (Click to Resume)
-      const blink = Math.floor(time * 3.5) % 2 === 0;
-      const badgeW = 680;
-      const badgeH = 76;
-      const badgeX = (w - badgeW) / 2;
-      const badgeY = 530;
-
-      ctx.fillStyle = this.hovered ? 'rgba(0, 255, 170, 0.3)' : 'rgba(0, 0, 0, 0.8)';
-      ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
-
-      ctx.strokeStyle = this.hovered ? (blink ? '#00ffaa' : '#ffffff') : 'rgba(0, 255, 170, 0.6)';
-      ctx.lineWidth = 3;
-      ctx.shadowColor = '#00ffaa';
-      ctx.shadowBlur = this.hovered ? 20 : 10;
-      ctx.strokeRect(badgeX, badgeY, badgeW, badgeH);
-
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = '#00ffaa';
-      ctx.font = 'bold 24px monospace';
+      ctx.font = 'bold 16px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
       ctx.textAlign = 'center';
-      
-      let actionLabel = '▶ CLICK TO ENTER FULLSCREEN PORTFOLIO';
-      if (this.isTransitioning) {
-        actionLabel = '▶ ENTERING FULLSCREEN PORTFOLIO...';
-      } else if (this.hasEntered) {
-        actionLabel = `▶ CLICK TO RESUME ${session.section}`;
-      }
-      ctx.fillText(actionLabel, w / 2, badgeY + 47);
-
-      // 8. Bottom Telemetry Status
-      ctx.textAlign = 'left';
-      ctx.font = '15px monospace';
-      ctx.fillStyle = '#00ffaa';
-      ctx.fillText(session.telemetry || '> WEBGPU ENGINE: ONLINE | ACTIVE SESSION PRESERVED', 40, 720);
+      const label = this.hasEntered ? `▶ CLICK TO RESUME ${this.activeSession.section}` : '▶ CLICK TO ENTER PORTFOLIO';
+      ctx.fillText(label, w / 2, pillY + 31);
     }
 
     this.screenTexture.needsUpdate = true;
@@ -734,8 +470,8 @@ class RoomIntro {
             prompt.innerText = this.hasEntered 
               ? `[ CLICK DISPLAY TO RESUME ${this.activeSession.section} ]`
               : '[ CLICK COMPUTER TO ENTER FULLSCREEN PORTFOLIO ]';
-            prompt.style.borderColor = 'rgba(0, 255, 170, 0.8)';
-            prompt.style.color = '#00ffaa';
+            prompt.style.borderColor = 'rgba(255, 255, 255, 0.8)';
+            prompt.style.color = '#ffffff';
           }
         } else {
           this.hovered = false;
@@ -744,7 +480,7 @@ class RoomIntro {
             prompt.innerText = this.hasEntered
               ? `[ SESSION ACTIVE: ${this.activeSession.section} | CLICK TO RESUME ]`
               : '[ HOVER DISPLAY FOR DIRECT PREVIEW | CLICK TO ENTER ]';
-            prompt.style.borderColor = 'rgba(0, 255, 170, 0.3)';
+            prompt.style.borderColor = 'rgba(255, 255, 255, 0.3)';
             prompt.style.color = '#ffffff';
           }
         }
