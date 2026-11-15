@@ -13,7 +13,7 @@ const CREDITS = [
     {
         title: 'Modeling & Texturing',
         rows: [
-            ['Henry Heffernan', 'Texturing, Composition, & UV'],
+            ['Vansh Sharma', 'Texturing, Composition, & UV'],
             ['Mickael Boitte', 'Computer Model'],
             ['Sean Nicolas', 'Environment Models'],
         ],
@@ -21,7 +21,7 @@ const CREDITS = [
     {
         title: 'Sound Design',
         rows: [
-            ['Henry Heffernan', 'Mixing, Composition, & Foley'],
+            ['Vansh Sharma', 'Mixing, Composition, & Foley'],
             ['Sound Cassette', 'Office Ambience'],
             ['Windows 95 Startup Sound', 'Microsoft'],
         ],
