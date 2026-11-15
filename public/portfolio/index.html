@@ -51,8 +51,23 @@
       } else if (e.data && e.data.type === 'leftMonitor') {
         document.documentElement.classList.remove('monitor-enter');
         document.documentElement.classList.add('monitor-exit');
+      } else if (e.data && e.data.type === 'forwardScroll' && window.lenis) {
+        window.lenis.scrollTo(window.lenis.scroll + e.data.deltaY * 0.75, { immediate: false });
       }
     });
+
+    let topScrollUpCount = 0;
+    window.addEventListener('wheel', (e) => {
+      if (e.deltaY < -15 && window.lenis && window.lenis.progress <= 0.005) {
+        topScrollUpCount++;
+        if (topScrollUpCount >= 2) {
+          topScrollUpCount = 0;
+          window.returnToDesk();
+        }
+      } else {
+        topScrollUpCount = 0;
+      }
+    }, { passive: true });
   }
 </script>
 <style>
