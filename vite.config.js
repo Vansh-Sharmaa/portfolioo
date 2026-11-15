@@ -49,8 +49,22 @@ function compressPlugin() {
   };
 }
 
+function osRewritePlugin() {
+  return {
+    name: 'os-rewrite-plugin',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (req.url === '/os' || req.url === '/os/') {
+          req.url = '/os/index.html';
+        }
+        next();
+      });
+    }
+  };
+}
+
 export default defineConfig({
-  plugins: [compressPlugin()],
+  plugins: [compressPlugin(), osRewritePlugin()],
   server: {
     host: '127.0.0.1',
     port: 5173,
@@ -66,8 +80,8 @@ export default defineConfig({
         '**/.workbuddy-ai/**',
         '**/chrome-profile/**',
         '**/node_modules/**',
-        '**/*.png',
-        '**/*.jpg'
+        '**/_henry/**',
+        '**/_henry_os/**'
       ]
     }
   },
