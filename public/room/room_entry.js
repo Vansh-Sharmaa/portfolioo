@@ -10,22 +10,29 @@ class RoomIntro {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     
-    // States: 'desk' (initial 3D PC view) -> 'monitor' (fullscreen portfolio)
-    this.state = 'desk';
+    // States: 
+    // 1. 'idle' (Initial wide view with "Click anywhere to begin", matching user screenshot)
+    // 2. 'desk' (Close-up 3D PC desk view with Netscape display)
+    // 3. 'monitor' (Fullscreen 3D CRT portfolio)
+    this.state = 'idle';
     this.isTransitioning = false;
     this.hovered = false;
-    this.hoverStartTime = 0;
 
-    // Theme: 'dark' (default) or 'light'
-    this.theme = localStorage.getItem('room_theme') || 'dark';
+    // Theme: 'light' (default matching Henry's original room) or 'dark'
+    this.theme = localStorage.getItem('room_theme') || 'light';
 
     // 1. Scene, Camera, Renderer
     this.scene = new THREE.Scene();
 
     this.camera = new THREE.PerspectiveCamera(35, this.width / this.height, 100, 100000);
     
-    // Camera Keyframes (Exact coordinates matching Henry Heffernan's isometric room)
+    // Camera Keyframes (Exact coordinates from Henry Heffernan's CameraKeyframes.ts)
     this.keyframes = {
+      // Wide room view: desk sitting in center with "Click anywhere to begin"
+      idle: {
+        pos: new THREE.Vector3(-20000, 12000, 20000),
+        focal: new THREE.Vector3(0, -1000, 0)
+      },
       // Desk view: perfectly framed 3D PC table with chair, mug, books, plant
       desk: {
         pos: new THREE.Vector3(0, 1800, 5500),
@@ -38,8 +45,8 @@ class RoomIntro {
       }
     };
 
-    this.currentPos = new THREE.Vector3().copy(this.keyframes.desk.pos);
-    this.currentFocal = new THREE.Vector3().copy(this.keyframes.desk.focal);
+    this.currentPos = new THREE.Vector3().copy(this.keyframes.idle.pos);
+    this.currentFocal = new THREE.Vector3().copy(this.keyframes.idle.focal);
     this.startPos = new THREE.Vector3().copy(this.currentPos);
     this.startFocal = new THREE.Vector3().copy(this.currentFocal);
     this.destPos = new THREE.Vector3().copy(this.currentPos);
@@ -85,7 +92,9 @@ class RoomIntro {
     requestAnimationFrame(this.animate);
 
     // Global navigation API
+    window.__roomIntro = this;
     window.returnToDesk = () => this.transitionTo('desk', 1500);
+    window.returnToRoom = () => this.transitionTo('idle', 1600);
     window.toggleRoomTheme = () => this.toggleTheme();
   }
 
@@ -135,7 +144,7 @@ class RoomIntro {
     const w = this.screenCanvas.width;
     const h = this.screenCanvas.height;
 
-    const isHovered = this.hovered || this.isTransitioning;
+    const isHovered = (this.hovered || this.state === 'monitor') && this.state !== 'idle';
 
     if (!isHovered) {
       // =========================================================================
@@ -516,10 +525,7 @@ class RoomIntro {
 
         const prompt = document.getElementById('room-prompt');
         if (hits.length > 0) {
-          if (!this.hovered) {
-            this.hovered = true;
-            this.hoverStartTime = performance.now();
-          }
+          this.hovered = true;
           document.body.style.cursor = 'pointer';
           if (prompt) {
             prompt.innerText = '[ CLICK COMPUTER TO ENTER FULLSCREEN PORTFOLIO ]';
@@ -538,10 +544,15 @@ class RoomIntro {
       }
     });
 
-    // Click anywhere on desk or computer to enter monitor view
+    // Click handler:
+    // When in 'idle' (wide view): Click anywhere to zoom into 'desk' view!
+    // When in 'desk': Click anywhere on computer/screen to zoom into 'monitor' view!
     this.container.addEventListener('click', (e) => {
       if (this.isTransitioning) return;
-      if (this.state === 'desk') {
+
+      if (this.state === 'idle') {
+        this.transitionTo('desk', 1700);
+      } else if (this.state === 'desk') {
         this.transitionTo('monitor', 1700);
       }
     });
@@ -562,12 +573,43 @@ class RoomIntro {
     this.destPos = this.keyframes[targetState].pos;
     this.destFocal = this.keyframes[targetState].focal;
 
+    const startPill = document.getElementById('room-start-pill');
+    const hud = document.getElementById('room-hud');
+    const prompt = document.getElementById('room-prompt');
+
     if (targetState === 'desk') {
-      window.scrollTo({ top: 0, behavior: 'instant' });
       this.container.style.display = 'block';
       this.container.style.opacity = '1';
       this.container.style.pointerEvents = 'auto';
       this.hovered = false;
+
+      // Hide "Click anywhere to begin" pill, show HUD and desk helper pill
+      if (startPill) startPill.style.opacity = '0';
+      setTimeout(() => { if (startPill && this.state !== 'idle') startPill.style.display = 'none'; }, 400);
+      if (hud) {
+        hud.style.opacity = '1';
+        hud.style.pointerEvents = 'auto';
+      }
+      if (prompt) {
+        prompt.style.opacity = '1';
+        prompt.innerText = '[ HOVER DISPLAY FOR DIRECT PREVIEW  |  CLICK TO ENTER ]';
+      }
+    } else if (targetState === 'idle') {
+      this.container.style.display = 'block';
+      this.container.style.opacity = '1';
+      this.container.style.pointerEvents = 'auto';
+      this.hovered = false;
+
+      // Show "Click anywhere to begin" pill, hide HUD and desk prompt
+      if (startPill) {
+        startPill.style.display = 'block';
+        setTimeout(() => { if (startPill) startPill.style.opacity = '1'; }, 50);
+      }
+      if (hud) {
+        hud.style.opacity = '0';
+        hud.style.pointerEvents = 'none';
+      }
+      if (prompt) prompt.style.opacity = '0';
     }
   }
 
@@ -589,12 +631,26 @@ class RoomIntro {
     this.timer.update();
     const elapsedTime = this.timer.getElapsed();
 
-    // 1. Update Monitor Screen Texture (Netscape when idle, Direct Front when hovered)
+    // 1. Update Monitor Screen Texture
     this.updateScreenTexture(elapsedTime);
 
     // 2. Camera Motion
     if (!this.isTransitioning) {
-      if (this.state === 'desk') {
+      if (this.state === 'idle') {
+        // Idle ambient sway & mouse parallax (matches Henry Heffernan's wide room motion)
+        const swayX = Math.sin((elapsedTime + 19) * 0.25) * 600;
+        const swayY = Math.cos((elapsedTime + 1) * 0.15) * 300;
+        const mouseX = this.rawMouse.x * 1200;
+        const mouseY = this.rawMouse.y * 600;
+
+        this.currentPos.x = this.keyframes.idle.pos.x + swayX + mouseX;
+        this.currentPos.y = this.keyframes.idle.pos.y + swayY + mouseY;
+        this.currentPos.z = this.keyframes.idle.pos.z;
+
+        this.currentFocal.copy(this.keyframes.idle.focal);
+        this.camera.position.copy(this.currentPos);
+        this.camera.lookAt(this.currentFocal);
+      } else if (this.state === 'desk') {
         // Subtle interactive mouse parallax on the 3D PC table
         const mouseX = this.rawMouse.x * 250;
         const mouseY = this.rawMouse.y * 150;
@@ -639,11 +695,11 @@ class RoomIntro {
           }, 350);
         }
       } else {
-        // Zooming back to desk view
+        // Zooming back to desk or idle view
         this.container.style.opacity = '1';
 
         if (t >= 1.0) {
-          this.state = 'desk';
+          this.state = this.targetState;
           this.isTransitioning = false;
         }
       }
