@@ -7,6 +7,7 @@ import Resources from '../Utils/Resources';
 import Sizes from '../Utils/Sizes';
 import Camera from '../Camera/Camera';
 import EventEmitter from '../Utils/EventEmitter';
+import UIEventBus from '../UI/EventBus';
 
 const SCREEN_SIZE = { w: 1280, h: 1024 };
 const IFRAME_PADDING = 32;
@@ -75,26 +76,7 @@ export default class MonitorScreen extends EventEmitter {
                     this.camera.trigger('enterMonitor');
                 }
 
-                if (
-                    !this.inComputer &&
-                    this.prevInComputer &&
-                    !this.mouseClickInProgress
-                ) {
-                    this.camera.trigger('leftMonitor');
-                }
-
-                if (
-                    !this.inComputer &&
-                    this.mouseClickInProgress &&
-                    this.prevInComputer
-                ) {
-                    this.shouldLeaveMonitor = true;
-                } else {
-                    this.shouldLeaveMonitor = false;
-                }
-
                 this.application.mouse.trigger('mousemove', [event]);
-
                 this.prevInComputer = this.inComputer;
             },
             false
@@ -105,6 +87,11 @@ export default class MonitorScreen extends EventEmitter {
                 // @ts-ignore
                 this.inComputer = event.inComputer;
                 this.application.mouse.trigger('mousedown', [event]);
+
+                // Return to desk only when user clicks outside the monitor while looking at it
+                if (!this.inComputer && this.camera.currentKeyframe === 'monitor') {
+                    this.camera.trigger('leftMonitor');
+                }
 
                 this.mouseClickInProgress = true;
                 this.prevInComputer = this.inComputer;
@@ -117,17 +104,16 @@ export default class MonitorScreen extends EventEmitter {
                 // @ts-ignore
                 this.inComputer = event.inComputer;
                 this.application.mouse.trigger('mouseup', [event]);
-
-                if (this.shouldLeaveMonitor) {
-                    this.camera.trigger('leftMonitor');
-                    this.shouldLeaveMonitor = false;
-                }
-
                 this.mouseClickInProgress = false;
                 this.prevInComputer = this.inComputer;
             },
             false
         );
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && this.camera.currentKeyframe === 'monitor') {
+                this.camera.trigger('leftMonitor');
+            }
+        });
     }
 
     /**
@@ -148,6 +134,23 @@ export default class MonitorScreen extends EventEmitter {
         iframe.onload = () => {
             if (iframe.contentWindow) {
                 window.addEventListener('message', (event) => {
+                    if (event.data && event.data.type === 'exitToDesk') {
+                        this.camera.trigger('leftMonitor');
+                        return;
+                    }
+                    if (event.data && event.data.type === 'toggleOS') {
+                        if (iframe.src.includes('portfolio')) {
+                            iframe.src = '/os/index.html';
+                        } else {
+                            iframe.src = '/portfolio/index.html';
+                        }
+                        return;
+                    }
+                    if (event.data && event.data.type === 'enterMonitor') {
+                        this.camera.trigger('enterMonitor');
+                        return;
+                    }
+
                     var evt = new CustomEvent(event.data.type, {
                         bubbles: true,
                         cancelable: false,
@@ -182,19 +185,22 @@ export default class MonitorScreen extends EventEmitter {
             }
         };
 
-        // Set iframe attributes
-        // PROD
-        iframe.src = '/os/index.html';
-        /**
-         * Use dev server is query params are present
-         *
-         * Warning: This will not work unless the dev server is running on localhost:3000
-         * Also running the dev server causes browsers to freak out over unsecure connections
-         * in the iframe, so it will flag a ton of issues.
-         */
+        // Listen for screen mode change from HUD
+        UIEventBus.on('toggleScreenMode', () => {
+            if (iframe.src.includes('portfolio')) {
+                iframe.src = '/os/index.html';
+            } else {
+                iframe.src = '/portfolio/index.html';
+            }
+        });
+
+        // Set iframe attributes - Load real 3D portfolio by default
+        iframe.src = '/portfolio/index.html';
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('dev')) {
             iframe.src = 'http://localhost:3000/';
+        } else if (urlParams.has('os')) {
+            iframe.src = '/os/index.html';
         }
         iframe.style.width = this.screenSize.width + 'px';
         iframe.style.height = this.screenSize.height + 'px';

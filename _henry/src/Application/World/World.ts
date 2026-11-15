@@ -27,7 +27,8 @@ export default class World {
         this.scene = this.application.scene;
         this.resources = this.application.resources;
         // Wait for resources
-        this.resources.on('ready', () => {
+        const initObjects = () => {
+            if (this.monitorScreen) return;
             // Setup
             this.environment = new Environment();
             this.decor = new Decor();
@@ -37,7 +38,13 @@ export default class World {
             this.audioManager = new AudioManager();
             // const hb = new Hitboxes();
             // this.cursor = new Cursor();
-        });
+        };
+
+        if (this.resources.loaded >= this.resources.toLoad && this.resources.toLoad > 0) {
+            initObjects();
+        } else {
+            this.resources.on('ready', initObjects);
+        }
     }
 
     update() {
