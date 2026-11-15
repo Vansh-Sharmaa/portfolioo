@@ -82,8 +82,8 @@
 </style>
 
 <!-- === ELECTRIC GAZE 21st.dev CANVAS2D ENGINE === -->
-<div id="electric-gaze-container" class="pointer-events-none absolute inset-0 z-0 flex items-center justify-center transition-opacity duration-700" style="overflow:hidden; opacity: 1;">
-  <canvas id="electric-gaze-canvas" width="1024" height="617" style="width: 100%; height: 100%; object-fit: cover; filter: drop-shadow(0 0 25px rgba(0,240,255,0.12));"></canvas>
+<div id="electric-gaze-container" class="pointer-events-none absolute inset-0 z-0 flex items-center justify-center transition-opacity duration-700" style="overflow:hidden; background: #040608; opacity: 1;">
+  <canvas id="electric-gaze-canvas" width="1024" height="537" style="width: 100%; height: 100%; object-fit: cover; filter: drop-shadow(0 0 25px rgba(0,240,255,0.12));"></canvas>
 </div>
 
 <script>
@@ -94,13 +94,13 @@
   const container = document.getElementById('electric-gaze-container');
 
   const baseImg = new Image();
-  baseImg.src = '/portfolio/electric_gaze_composite_bg.png';
+  baseImg.src = '/portfolio/electric_gaze_clean.png';
 
-  // Laser geometry coordinates in 1024x617 reference space
-  const eyeX = 353.0;
-  const eyeY = 245.8;
-  const flareEndX = 625.0;
-  const flareEndY = 218.0;
+  // Laser geometry coordinates in 1024x537 reference space
+  const eyeX = 331.0;
+  const eyeY = 213.5;
+  const flareEndX = 620.0;
+  const flareEndY = 190.0;
   const dx = flareEndX - eyeX;
   const dy = flareEndY - eyeY;
   const flareAngle = Math.atan2(dy, dx);
@@ -124,17 +124,18 @@
     const w = canvas.width;
     const h = canvas.height;
 
-    // Clear canvas
-    ctx.clearRect(0, 0, w, h);
+    // 1. Clean dark void background (NO boxes, NO grid lines)
+    ctx.fillStyle = '#040608';
+    ctx.fillRect(0, 0, w, h);
 
-    // 1. Draw base composite (User wireframe grid background + Vansh portrait)
+    // 2. Draw clean Electric Gaze portrait (Vansh Sharma's face)
     ctx.save();
-    const facePulse = 1.0 + 0.02 * Math.sin(t * 2.8);
+    const facePulse = 1.0 + 0.03 * Math.sin(t * 2.8);
     ctx.globalAlpha = Math.min(1.0, facePulse);
     ctx.drawImage(baseImg, 0, 0, w, h);
     ctx.restore();
 
-    // 2. THE SIGNATURE "ELECTRIC GAZE" ANAMORPHIC OPTICAL LASER FLARE
+    // 3. THE SIGNATURE "ELECTRIC GAZE" ANAMORPHIC OPTICAL LASER FLARE
     const pulse = 0.85 + 0.15 * Math.sin(t * 6.5);
     const flicker = Math.sin(t * 18.0) * 0.05;
     const currentPulse = Math.max(0.65, Math.min(1.05, pulse + flicker));
@@ -149,7 +150,7 @@
     ctx.globalCompositeOperation = 'screen';
 
     // Layer A: Wide atmospheric cyan bloom
-    ctx.strokeStyle = `rgba(0, 210, 255, ${0.45 * currentPulse})`;
+    ctx.strokeStyle = `rgba(0, 210, 255, ${0.40 * currentPulse})`;
     ctx.lineWidth = 16;
     ctx.lineCap = 'round';
     ctx.beginPath();
@@ -158,7 +159,7 @@
     ctx.stroke();
 
     // Layer B: Mid electric neon cyan streak
-    ctx.strokeStyle = `rgba(0, 245, 255, ${0.85 * currentPulse})`;
+    ctx.strokeStyle = `rgba(0, 245, 255, ${0.80 * currentPulse})`;
     ctx.lineWidth = 6;
     ctx.beginPath();
     ctx.moveTo(sx, sy);
@@ -216,11 +217,18 @@
 
     ctx.restore();
 
-    // 3. Post-FX: Subtle CRT scanlines
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+    // 4. Post-FX: Subtle CRT scanlines
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.16)';
     for (let y = 0; y < h; y += 3) {
       ctx.fillRect(0, y, w, 1);
     }
+
+    // 5. Post-FX: Soft edge vignette blending into dark void
+    const grad = ctx.createRadialGradient(w/2, h/2, w * 0.38, w/2, h/2, w * 0.72);
+    grad.addColorStop(0, 'rgba(4, 6, 8, 0)');
+    grad.addColorStop(1, 'rgba(4, 6, 8, 0.85)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
   }
 
   // Scroll Fade: smoothly hide when scrolling into projects / carousel / last sections
