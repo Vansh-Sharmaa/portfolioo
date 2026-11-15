@@ -82,7 +82,7 @@
 </style>
 
 <!-- === ELECTRIC GAZE 21st.dev CANVAS2D ENGINE === -->
-<div id="electric-gaze-container" class="pointer-events-none absolute inset-0 z-0 flex items-center justify-center transition-opacity duration-700" style="overflow:hidden; background: #040608; opacity: 1;">
+<div id="electric-gaze-container" class="pointer-events-none absolute inset-0 z-0 flex items-center justify-center will-change-transform" style="overflow:hidden; background: #040608; opacity: 1; transform: translate3d(0, 0%, 0);">
   <canvas id="electric-gaze-canvas" width="1024" height="537" style="width: 100%; height: 100%; object-fit: cover; filter: drop-shadow(0 0 25px rgba(0,240,255,0.12));"></canvas>
 </div>
 
@@ -231,31 +231,47 @@
     ctx.fillRect(0, 0, w, h);
   }
 
-  // Scroll Fade: smoothly hide when scrolling into projects / carousel / last sections
-  function checkScroll() {
+  // PHYSICAL SCROLL: Moves the photo UPWARDS directly with the scroll, NO FADE!
+  function updateScroll() {
     const scrollEl = document.querySelector('[data-page-scroll]') || document.documentElement || document.body;
     const y = scrollEl.scrollTop || window.scrollY || window.pageYOffset || 0;
-    const bodyClass = document.body.className || '';
-    const isScrollingPastIntro = !bodyClass.includes('is--intro') ||
-                                 bodyClass.includes('is--carousel') ||
-                                 bodyClass.includes('is--last') ||
-                                 bodyClass.includes('is--project') ||
-                                 bodyClass.includes('is--page') ||
-                                 y > 40;
+
+    // As y goes from 0 to 750, the panel translates upwards from 0% to -100%
+    const maxScroll = 750.0;
+    const progress = Math.min(1.0, Math.max(0.0, y / maxScroll));
+
     if (container) {
-      container.style.opacity = isScrollingPastIntro ? '0' : '1';
-      container.style.visibility = isScrollingPastIntro && (container.style.opacity === '0') ? 'hidden' : 'visible';
+      // NO FADE! Keep 100% solid opacity!
+      container.style.opacity = '1';
+
+      // Translate upwards in direct 1:1 sync with scroll
+      container.style.transform = 'translate3d(0, ' + (-progress * 100) + '%, 0)';
+
+      // Only hide when completely off-screen above the top
+      container.style.visibility = (progress >= 0.999) ? 'hidden' : 'visible';
     }
   }
-  window.addEventListener('scroll', checkScroll, { passive: true });
+
+  window.addEventListener('scroll', updateScroll, { passive: true });
   const scrollContainer = document.querySelector('[data-page-scroll]');
   if (scrollContainer) {
-    scrollContainer.addEventListener('scroll', checkScroll, { passive: true });
+    scrollContainer.addEventListener('scroll', updateScroll, { passive: true });
   }
-  const observer = new MutationObserver(checkScroll);
-  observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-scene'] });
-  setInterval(checkScroll, 200);
-  checkScroll();
+
+  // Hook into Lenis or requestAnimationFrame loop for ultra-smooth 60fps tracking
+  let lastScrollY = -1;
+  function animScrollLoop() {
+    const scrollEl = document.querySelector('[data-page-scroll]') || document.documentElement || document.body;
+    const y = scrollEl.scrollTop || window.scrollY || window.pageYOffset || 0;
+    if (y !== lastScrollY) {
+      lastScrollY = y;
+      updateScroll();
+    }
+    requestAnimationFrame(animScrollLoop);
+  }
+  requestAnimationFrame(animScrollLoop);
+
+  updateScroll();
 })();
 </script>
 <!-- === END ELECTRIC GAZE === -->
