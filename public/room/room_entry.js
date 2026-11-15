@@ -11,12 +11,25 @@ class RoomIntro {
     this.height = window.innerHeight;
     
     // States: 
-    // 1. 'idle' (Initial wide view with "Click anywhere to begin", matching user screenshot)
-    // 2. 'desk' (Close-up 3D PC desk view with Netscape display)
-    // 3. 'monitor' (Fullscreen 3D CRT portfolio)
+    // 1. 'idle' (Initial wide view with "Click anywhere to begin", matching original site)
+    // 2. 'desk' (Close-up 3D PC desk view)
+    // 3. 'monitor' (Fullscreen interactive 3D WebGPU CRT portfolio)
     this.state = 'idle';
     this.isTransitioning = false;
     this.hovered = false;
+    this.hasEntered = false; // Tracks if user has entered the portfolio at least once
+
+    // Real-Time Active Session State (Maintains continuous flow of what user opens)
+    this.activeSession = {
+      section: 'HERO',
+      num: null,
+      title: 'VANSH SHARMA',
+      subtitle: '// PORTFOLIO ©2026',
+      tags: ['WEBGPU ENGINE: ONLINE', '05 PROJECTS READY'],
+      desc: 'INDEPENDENT DESIGN ENGINEER BUILDING STUNNING WEBSITES FOR AMBITIOUS STARTUPS AND WORLDWIDE BRANDS',
+      telemetry: '> WEBGPU ENGINE: ONLINE | SELECTED WORK: 05 PROJECTS READY',
+      progress: 0
+    };
 
     // Theme: 'light' (default matching Henry's original room) or 'dark'
     this.theme = localStorage.getItem('room_theme') || 'light';
@@ -26,7 +39,7 @@ class RoomIntro {
 
     this.camera = new THREE.PerspectiveCamera(35, this.width / this.height, 100, 100000);
     
-    // Camera Keyframes (Exact coordinates from Henry Heffernan's CameraKeyframes.ts)
+    // Camera Keyframes (Coordinates matching Henry Heffernan's isometric room)
     this.keyframes = {
       // Wide room view: desk sitting in center with "Click anywhere to begin"
       idle: {
@@ -74,14 +87,15 @@ class RoomIntro {
     // Apply initial theme
     this.applyTheme(this.theme, false);
 
-    // 3. Dynamic Screen Texture: DUAL STATE (Original Netscape at rest, Direct Front on hover)
+    // 3. Dynamic Screen Texture: REAL-TIME SYNCHRONIZED
     this.setupScreenCanvas();
 
     // 4. Load Models & Precision Screen
     this.loadModels();
 
-    // 5. Setup Events
+    // 5. Setup Events & Live Session Tracker
     this.setupEvents();
+    this.setupLiveSessionTracker();
 
     // 6. Setup Top HUD & Theme Switcher
     this.setupHUD();
@@ -96,6 +110,151 @@ class RoomIntro {
     window.returnToDesk = () => this.transitionTo('desk', 1500);
     window.returnToRoom = () => this.transitionTo('idle', 1600);
     window.toggleRoomTheme = () => this.toggleTheme();
+  }
+
+  setupLiveSessionTracker() {
+    const updateSession = () => {
+      let progress = 0;
+      if (window.lenis && typeof window.lenis.progress === 'number') {
+        progress = window.lenis.progress;
+      } else {
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        progress = Math.min(Math.max(window.scrollY / maxScroll, 0), 1);
+      }
+
+      // Check if Menu is open
+      const menu = document.querySelector('[data-menu]');
+      if (menu && menu.hasAttribute('data-open')) {
+        this.activeSession = {
+          section: 'MENU',
+          num: 'NAV',
+          title: 'NAVIGATION MENU',
+          subtitle: '// DIRECTORY',
+          role: 'EXPLORE PORTFOLIO',
+          tags: ['PROJECTS', 'ABOUT', 'CONTACT', 'SOCIALS'],
+          desc: 'Selected Work, About Me, Contact Form, GitHub, LinkedIn, and Twitter.',
+          telemetry: '> MENU OPEN // CLICK TO RESUME DIRECTORY',
+          progress
+        };
+        return;
+      }
+
+      // Progress-based project & section resolution matching the 18.1 viewports
+      if (progress < 0.10) {
+        this.activeSession = {
+          section: 'HERO',
+          num: null,
+          title: 'VANSH SHARMA',
+          subtitle: '// PORTFOLIO ©2026',
+          tags: ['WEBGPU ENGINE: ONLINE', '05 PROJECTS READY'],
+          desc: 'INDEPENDENT DESIGN ENGINEER BUILDING STUNNING WEBSITES FOR AMBITIOUS STARTUPS AND WORLDWIDE BRANDS',
+          telemetry: '> WEBGPU ENGINE: ONLINE | SELECTED WORK: 05 PROJECTS READY',
+          progress
+        };
+      } else if (progress < 0.26) {
+        this.activeSession = {
+          section: 'NETSENTINEL',
+          num: '01 / 05',
+          title: 'NETSENTINEL',
+          subtitle: 'AUTONOMOUS NOC ENGINE',
+          role: 'BACKEND / PYTHON / DEVOPS',
+          tags: ['FASTAPI', 'PYTHON', 'DOCKER', 'ITIL P1/P2'],
+          desc: 'Production-ready Network Operations Center platform with real-time telemetry polling, topology-aware alarm correlation, and automated ITIL incident ticketing.',
+          telemetry: '> NOC TELEMETRY: ACTIVE // TOPOLOGY MAP RESOLVED 100%',
+          progress
+        };
+      } else if (progress < 0.42) {
+        this.activeSession = {
+          section: 'FILEGENIE',
+          num: '02 / 05',
+          title: 'FILEGENIE',
+          subtitle: 'INTELLIGENT ML FILE ORGANIZER',
+          role: 'FULL-STACK / ML / PYTHON',
+          tags: ['RANDOMFOREST', '300 TREES', 'FASTAPI', 'REACT 18'],
+          desc: 'Intelligent ML-powered file organizer — 300-tree RandomForest ML classifier, FastAPI backend, React 18 frontend, and JWT authentication for teams.',
+          telemetry: '> ML MODEL: RANDOMFOREST // ACCURACY 98.4%',
+          progress
+        };
+      } else if (progress < 0.58) {
+        this.activeSession = {
+          section: 'QUERYGENIE',
+          num: '03 / 05',
+          title: 'QUERYGENIE',
+          subtitle: 'MULTILINGUAL TEXT-TO-SQL AGENT',
+          role: 'AI/ML / NLP / PYTHON',
+          tags: ['GROQ LLM', 'LANGGRAPH', 'WHISPER', 'MULTI-LANG'],
+          desc: 'Multilingual Autonomous Text-to-SQL Agent supporting Hindi, Telugu, Hinglish and English — Groq LLMs, LangGraph self-healing loops, and Whisper voice transcription.',
+          telemetry: '> AGENT STATUS: SELF-HEALING LOOP ACTIVE (0.12s)',
+          progress
+        };
+      } else if (progress < 0.74) {
+        this.activeSession = {
+          section: 'LEXAI',
+          num: '04 / 05',
+          title: 'LEXAI',
+          subtitle: 'LEGAL DOCUMENT INTELLIGENCE',
+          role: 'AI/ML / BACKEND / PYTHON',
+          tags: ['LEGAL NLP', 'CLAUSE AUDIT', 'CODEQL', 'CI/CD'],
+          desc: 'AI-Driven Legal Document Intelligence platform with automated contract analysis, clause extraction, risk flagging, CI/CD, and CodeQL security scanning.',
+          telemetry: '> AUDIT: 42 CLAUSES EXTRACTED // CODEQL PASSED',
+          progress
+        };
+      } else if (progress < 0.86) {
+        this.activeSession = {
+          section: 'INTELLECTA',
+          num: '05 / 05',
+          title: 'INTELLECTA',
+          subtitle: 'MULTI-AGENT RESEARCH ENGINE',
+          role: 'AI / MULTI-AGENT / PYTHON',
+          tags: ['MULTI-AGENT', 'DEEP RESEARCH', 'SYNTHESIS'],
+          desc: 'Autonomous Multi-Agent Research Engine orchestrating specialized AI agents to gather, synthesize, cross-check, and present deep research on any topic.',
+          telemetry: '> AGENT ORCHESTRATION: 4 AGENTS SYNTHESIZING',
+          progress
+        };
+      } else if (progress < 0.94) {
+        this.activeSession = {
+          section: 'ABOUT',
+          num: 'INFO',
+          title: 'ABOUT ME',
+          subtitle: '// VANSH SHARMA — DESIGN ENGINEER',
+          tags: ['CREATIVE DEV', '3D / WEBGPU', 'FULL-STACK'],
+          desc: 'I design and build websites that make brands memorable. Most websites either look stunning or run well. I build ones that do both, packed with motion and 3D.',
+          telemetry: '> SECTION: ABOUT ME // READY FOR COLLABORATION',
+          progress
+        };
+      } else {
+        this.activeSession = {
+          section: 'CONTACT',
+          num: 'CONNECT',
+          title: "LET'S TALK ABOUT YOUR PROJECT",
+          subtitle: '// GET IN TOUCH',
+          tags: ['24HR RESPONSE', 'GLOBAL AVAILABILITY'],
+          desc: 'Fill a quick form and I reach out to you in 24 hours. Email: contact.vanshsharma@gmail.com.',
+          telemetry: '> CONTACT FORM READY // INBOX CONNECTED',
+          progress
+        };
+      }
+    };
+
+    // Listen to Lenis scroll
+    const checkLenis = () => {
+      if (window.lenis) {
+        window.lenis.on('scroll', updateSession);
+      } else {
+        setTimeout(checkLenis, 300);
+      }
+    };
+    checkLenis();
+
+    window.addEventListener('scroll', updateSession, { passive: true });
+
+    // Listen to project label clicks
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-project-labels] button, [data-project-slide]');
+      if (btn) {
+        setTimeout(updateSession, 100);
+      }
+    });
   }
 
   applyTheme(theme) {
@@ -144,18 +303,19 @@ class RoomIntro {
     const w = this.screenCanvas.width;
     const h = this.screenCanvas.height;
 
-    const isHovered = (this.hovered || this.state === 'monitor') && this.state !== 'idle';
+    // Show vintage Netscape ONLY if user has NEVER entered the portfolio yet and is not hovering
+    const showInitialNetscape = !this.hasEntered && !this.hovered && this.state !== 'monitor';
 
-    if (!isHovered) {
+    if (showInitialNetscape) {
       // =========================================================================
-      // STATE A: ORIGINAL RETRO NETSCAPE BROWSER (When resting at desk, like original Henry Heffernan site)
+      // INITIAL RESTING STATE: ORIGINAL VINTAGE NETSCAPE 98 (Before first entrance)
       // =========================================================================
       
       // 1. Windows 95/98 Window Outer Frame
       ctx.fillStyle = '#c0c0c0';
       ctx.fillRect(0, 0, w, h);
 
-      // Outer 3D Bevel (raised window edge)
+      // Outer 3D Bevel
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, w, 3);
       ctx.fillRect(0, 0, 3, h);
@@ -165,8 +325,8 @@ class RoomIntro {
 
       // 2. Classic Windows Gradient Title Bar
       const titleGrad = ctx.createLinearGradient(4, 4, w - 8, 4);
-      titleGrad.addColorStop(0, '#000080'); // Classic Navy
-      titleGrad.addColorStop(1, '#1084d0'); // Windows Cyan
+      titleGrad.addColorStop(0, '#000080');
+      titleGrad.addColorStop(1, '#1084d0');
       ctx.fillStyle = titleGrad;
       ctx.fillRect(4, 4, w - 8, 36);
 
@@ -208,7 +368,6 @@ class RoomIntro {
       ctx.font = 'bold 15px "Segoe UI", sans-serif';
       ctx.fillText('Location:', 14, 96);
       
-      // Inset URL input box
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(90, 80, w - 104, 25);
       ctx.fillStyle = '#404040';
@@ -218,22 +377,19 @@ class RoomIntro {
       ctx.font = '15px monospace';
       ctx.fillText('https://vansh-sharmaa.github.io/portfolio3d/', 100, 97);
 
-      // 6. Browser Content Area (White Canvas)
+      // 6. Browser Content Area
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(6, 110, w - 12, h - 142);
-      // Inset border for content area
       ctx.fillStyle = '#404040';
       ctx.fillRect(6, 110, w - 12, 2);
       ctx.fillRect(6, 110, 2, h - 142);
 
-      // === WEBPAGE CONTENT ===
       // Left Sidebar Column
       ctx.fillStyle = '#f5f5f5';
       ctx.fillRect(8, 112, 230, h - 146);
       ctx.fillStyle = '#808080';
       ctx.fillRect(238, 112, 1, h - 146);
 
-      // Sidebar: Branding
       ctx.fillStyle = '#000000';
       ctx.font = 'bold 28px "Times New Roman", Times, serif';
       ctx.fillText('Vansh', 26, 160);
@@ -243,7 +399,6 @@ class RoomIntro {
       ctx.fillStyle = '#555555';
       ctx.fillText('Software ' + new Date().getFullYear(), 26, 218);
 
-      // Sidebar Links
       const links = [
         '• HOME',
         '• ABOUT',
@@ -265,26 +420,23 @@ class RoomIntro {
 
       // Right Main Article Pane
       const mainX = 260;
-      // Top utility links
       ctx.fillStyle = '#0000ee';
       ctx.font = '15px "Times New Roman", serif';
       ctx.fillText('• [3D WebGPU Edition]   • [Full Screen Mode]   • [GitHub Portfolio]', mainX, 145);
       ctx.fillStyle = '#808080';
       ctx.fillRect(mainX, 155, w - mainX - 30, 1);
 
-      // Article Title
       ctx.fillStyle = '#000000';
       ctx.font = 'bold 30px "Times New Roman", serif';
       ctx.fillText('NetSentinel: Autonomous NOC Engine', mainX, 198);
 
-      // Article Body Text
       ctx.font = '16px "Times New Roman", serif';
       ctx.fillStyle = '#222222';
       ctx.fillText('Production-ready Network Operations Center platform with real-time telemetry,', mainX, 230);
       ctx.fillText('topology-aware alarm correlation, and automated ITIL incident dispatch.', mainX, 252);
       ctx.fillText('Architected using FastAPI, Python, Docker containers, and high-throughput pipelines.', mainX, 274);
 
-      // Interactive Demo Box (Visual Game/Demo canvas like Henry's screenshot)
+      // Interactive Demo Box
       const boxW = w - mainX - 50;
       const boxH = 220;
       ctx.fillStyle = '#08140e';
@@ -293,7 +445,6 @@ class RoomIntro {
       ctx.lineWidth = 2;
       ctx.strokeRect(mainX, 295, boxW, boxH);
 
-      // Retro animated grid
       ctx.fillStyle = 'rgba(0, 255, 136, 0.08)';
       for (let gy = 295; gy < 295 + boxH; gy += 16) {
         ctx.fillRect(mainX, gy, boxW, 1);
@@ -302,7 +453,6 @@ class RoomIntro {
         ctx.fillRect(gx, 295, 1, boxH);
       }
 
-      // Animated oscilloscope wave
       ctx.strokeStyle = '#00ff88';
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -314,7 +464,6 @@ class RoomIntro {
       }
       ctx.stroke();
 
-      // Pulsing Green Callout in center of demo
       const calloutW = boxW - 60;
       const calloutH = 46;
       const calloutX = mainX + 30;
@@ -330,7 +479,6 @@ class RoomIntro {
       ctx.textAlign = 'center';
       ctx.fillText('▶  HOVER DISPLAY TO ENTER 3D CRT PORTFOLIO', calloutX + calloutW / 2, calloutY + 28);
 
-      // Demo box telemetry footer
       ctx.fillStyle = '#00ffaa';
       ctx.font = '13px monospace';
       ctx.textAlign = 'left';
@@ -352,9 +500,11 @@ class RoomIntro {
 
     } else {
       // =========================================================================
-      // STATE B: DIRECT WEBSITE FRONT (When hovered or transitioning into monitor)
+      // REAL-TIME SYNCHRONIZED CRT DISPLAY (Preserves active session without breaking flow!)
       // =========================================================================
       
+      const session = this.activeSession;
+
       // 1. Deep black CRT glass
       ctx.fillStyle = '#020403';
       ctx.fillRect(0, 0, w, h);
@@ -365,14 +515,14 @@ class RoomIntro {
         ctx.fillRect(0, y, w, 2);
       }
 
-      // 3. CRT Screen Border with subtle corner vignette
+      // 3. CRT Screen Border & Glass Glow
       ctx.strokeStyle = 'rgba(0, 255, 170, 0.4)';
       ctx.lineWidth = 4;
       ctx.strokeRect(8, 8, w - 16, h - 16);
 
-      // Subtle CRT horizontal glitch / scan beam
+      // Subtle CRT scan beam
       const scanY = (Math.floor(time * 350) % h);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
       ctx.fillRect(8, scanY, w - 16, 8);
 
       // 4. Header Bar
@@ -383,67 +533,120 @@ class RoomIntro {
 
       ctx.font = '18px monospace';
       ctx.textAlign = 'right';
-      ctx.fillText("LET'S TALK   MENU ☰", w - 40, 58);
+      const headerLabel = session.num ? `[ ${session.num} // ${session.section} ]` : "LET'S TALK   MENU ☰";
+      ctx.fillText(headerLabel, w - 40, 58);
 
-      // 5. Main Hero Text (Left side)
+      // 5. Main Hero/Project Content in Real Time
       ctx.textAlign = 'left';
-      ctx.font = 'bold 54px monospace';
+      ctx.font = 'bold 50px monospace';
       ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
-      ctx.shadowBlur = 14;
-      ctx.fillText('VANSH SHARMA', 40, 280);
-
+      ctx.shadowColor = 'rgba(0, 255, 170, 0.7)';
+      ctx.shadowBlur = 12;
+      ctx.fillText(session.title, 40, 160);
       ctx.shadowBlur = 0;
-      ctx.font = '22px monospace';
-      ctx.fillStyle = '#aaaaaa';
-      ctx.fillText('// PORTFOLIO', 40, 325);
-      ctx.fillText('©2026', 220, 325);
 
-      // 6. Right Side Pitch Statement
-      ctx.font = 'bold 20px monospace';
-      ctx.fillStyle = '#ffffff';
-      ctx.textAlign = 'right';
-      const lines = [
-        'INDEPENDENT DESIGN ENGINEER',
-        'BUILDING STUNNING WEBSITES',
-        'FOR AMBITIOUS STARTUPS AND',
-        'WORLDWIDE BRANDS'
-      ];
-      let ry = 250;
-      for (const line of lines) {
-        ctx.fillText(line, w - 40, ry);
-        ry += 32;
+      // Subtitle / Tagline
+      ctx.font = '20px monospace';
+      ctx.fillStyle = '#00ffaa';
+      ctx.fillText(session.subtitle || '// PORTFOLIO ©2026', 40, 200);
+
+      // Role tag if project
+      if (session.role) {
+        ctx.font = 'bold 16px monospace';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(`ROLE: ${session.role}`, 40, 235);
       }
 
-      // 7. Interactive Hover Prompt / Pulsing Expansion Badge
-      const blink = Math.floor(time * 3.5) % 2 === 0;
-      const badgeW = 660;
-      const badgeH = 80;
-      const badgeX = (w - badgeW) / 2;
-      const badgeY = 480;
+      // 6. Interactive Telemetry / Description Frame
+      const cardY = session.role ? 260 : 230;
+      const cardH = 220;
+      ctx.fillStyle = 'rgba(0, 20, 12, 0.7)';
+      ctx.fillRect(40, cardY, w - 80, cardH);
+      ctx.strokeStyle = 'rgba(0, 255, 170, 0.35)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(40, cardY, w - 80, cardH);
 
-      // Glowing border box
-      ctx.fillStyle = 'rgba(0, 255, 170, 0.25)';
+      // Animated oscilloscope / radar inside frame
+      ctx.strokeStyle = 'rgba(0, 255, 170, 0.5)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let x = 0; x < w - 120; x += 4) {
+        const y = Math.sin((x * 0.03) + time * 5.0) * 16 +
+                  Math.sin((x * 0.08) - time * 2.0) * 8;
+        if (x === 0) ctx.moveTo(60 + x, cardY + 50 + y);
+        else ctx.lineTo(60 + x, cardY + 50 + y);
+      }
+      ctx.stroke();
+
+      // Description text wrapped nicely
+      ctx.font = '18px monospace';
+      ctx.fillStyle = '#e0e0e0';
+      const words = session.desc.split(' ');
+      let line = '';
+      let textY = cardY + 110;
+      for (const word of words) {
+        const testLine = line + (line ? ' ' : '') + word;
+        if (ctx.measureText(testLine).width > w - 130) {
+          ctx.fillText(line, 60, textY);
+          line = word;
+          textY += 26;
+        } else {
+          line = testLine;
+        }
+      }
+      if (line) ctx.fillText(line, 60, textY);
+
+      // Tags badges
+      if (session.tags && session.tags.length > 0) {
+        let tagX = 60;
+        ctx.font = 'bold 13px monospace';
+        for (const tag of session.tags) {
+          const tw = ctx.measureText(tag).width + 16;
+          ctx.fillStyle = 'rgba(0, 255, 170, 0.15)';
+          ctx.fillRect(tagX, cardY + cardH - 35, tw, 22);
+          ctx.strokeStyle = '#00ffaa';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(tagX, cardY + cardH - 35, tw, 22);
+          ctx.fillStyle = '#00ffaa';
+          ctx.fillText(tag, tagX + 8, cardY + cardH - 19);
+          tagX += tw + 10;
+        }
+      }
+
+      // 7. Interactive Action Badge (Click to Resume)
+      const blink = Math.floor(time * 3.5) % 2 === 0;
+      const badgeW = 680;
+      const badgeH = 76;
+      const badgeX = (w - badgeW) / 2;
+      const badgeY = 530;
+
+      ctx.fillStyle = this.hovered ? 'rgba(0, 255, 170, 0.3)' : 'rgba(0, 0, 0, 0.8)';
       ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
 
-      ctx.strokeStyle = blink ? '#00ffaa' : '#ffffff';
+      ctx.strokeStyle = this.hovered ? (blink ? '#00ffaa' : '#ffffff') : 'rgba(0, 255, 170, 0.6)';
       ctx.lineWidth = 3;
       ctx.shadowColor = '#00ffaa';
-      ctx.shadowBlur = 18;
+      ctx.shadowBlur = this.hovered ? 20 : 10;
       ctx.strokeRect(badgeX, badgeY, badgeW, badgeH);
 
       ctx.shadowBlur = 0;
       ctx.fillStyle = '#00ffaa';
-      ctx.font = 'bold 25px monospace';
+      ctx.font = 'bold 24px monospace';
       ctx.textAlign = 'center';
-      const actionLabel = this.isTransitioning ? '▶ ENTERING FULLSCREEN PORTFOLIO...' : '▶ CLICK TO ENTER FULLSCREEN PORTFOLIO';
-      ctx.fillText(actionLabel, w / 2, badgeY + 48);
+      
+      let actionLabel = '▶ CLICK TO ENTER FULLSCREEN PORTFOLIO';
+      if (this.isTransitioning) {
+        actionLabel = '▶ ENTERING FULLSCREEN PORTFOLIO...';
+      } else if (this.hasEntered) {
+        actionLabel = `▶ CLICK TO RESUME ${session.section}`;
+      }
+      ctx.fillText(actionLabel, w / 2, badgeY + 47);
 
       // 8. Bottom Telemetry Status
       ctx.textAlign = 'left';
-      ctx.font = '16px monospace';
+      ctx.font = '15px monospace';
       ctx.fillStyle = '#00ffaa';
-      ctx.fillText('> WEBGPU ENGINE: ONLINE  |  SELECTED WORK: 04 PROJECTS READY', 40, 720);
+      ctx.fillText(session.telemetry || '> WEBGPU ENGINE: ONLINE | ACTIVE SESSION PRESERVED', 40, 720);
     }
 
     this.screenTexture.needsUpdate = true;
@@ -528,7 +731,9 @@ class RoomIntro {
           this.hovered = true;
           document.body.style.cursor = 'pointer';
           if (prompt) {
-            prompt.innerText = '[ CLICK COMPUTER TO ENTER FULLSCREEN PORTFOLIO ]';
+            prompt.innerText = this.hasEntered 
+              ? `[ CLICK DISPLAY TO RESUME ${this.activeSession.section} ]`
+              : '[ CLICK COMPUTER TO ENTER FULLSCREEN PORTFOLIO ]';
             prompt.style.borderColor = 'rgba(0, 255, 170, 0.8)';
             prompt.style.color = '#00ffaa';
           }
@@ -536,7 +741,9 @@ class RoomIntro {
           this.hovered = false;
           document.body.style.cursor = 'default';
           if (prompt) {
-            prompt.innerText = '[ HOVER DISPLAY FOR DIRECT PREVIEW  |  CLICK TO ENTER ]';
+            prompt.innerText = this.hasEntered
+              ? `[ SESSION ACTIVE: ${this.activeSession.section} | CLICK TO RESUME ]`
+              : '[ HOVER DISPLAY FOR DIRECT PREVIEW | CLICK TO ENTER ]';
             prompt.style.borderColor = 'rgba(0, 255, 170, 0.3)';
             prompt.style.color = '#ffffff';
           }
@@ -578,6 +785,8 @@ class RoomIntro {
     const prompt = document.getElementById('room-prompt');
 
     if (targetState === 'desk') {
+      // NOTE: NEVER call window.scrollTo(0) here!
+      // This preserves user's active scroll, modal, and reading spot!
       this.container.style.display = 'block';
       this.container.style.opacity = '1';
       this.container.style.pointerEvents = 'auto';
@@ -592,7 +801,9 @@ class RoomIntro {
       }
       if (prompt) {
         prompt.style.opacity = '1';
-        prompt.innerText = '[ HOVER DISPLAY FOR DIRECT PREVIEW  |  CLICK TO ENTER ]';
+        prompt.innerText = this.hasEntered
+          ? `[ SESSION ACTIVE: ${this.activeSession.section} | CLICK TO RESUME ]`
+          : '[ HOVER DISPLAY FOR DIRECT PREVIEW | CLICK TO ENTER ]';
       }
     } else if (targetState === 'idle') {
       this.container.style.display = 'block';
@@ -600,7 +811,6 @@ class RoomIntro {
       this.container.style.pointerEvents = 'auto';
       this.hovered = false;
 
-      // Show "Click anywhere to begin" pill, hide HUD and desk prompt
       if (startPill) {
         startPill.style.display = 'block';
         setTimeout(() => { if (startPill) startPill.style.opacity = '1'; }, 50);
@@ -610,6 +820,8 @@ class RoomIntro {
         hud.style.pointerEvents = 'none';
       }
       if (prompt) prompt.style.opacity = '0';
+    } else if (targetState === 'monitor') {
+      this.hasEntered = true;
     }
   }
 
@@ -631,13 +843,12 @@ class RoomIntro {
     this.timer.update();
     const elapsedTime = this.timer.getElapsed();
 
-    // 1. Update Monitor Screen Texture
+    // 1. Update Monitor Screen Texture (Real-time synchronized)
     this.updateScreenTexture(elapsedTime);
 
     // 2. Camera Motion
     if (!this.isTransitioning) {
       if (this.state === 'idle') {
-        // Idle ambient sway & mouse parallax (matches Henry Heffernan's wide room motion)
         const swayX = Math.sin((elapsedTime + 19) * 0.25) * 600;
         const swayY = Math.cos((elapsedTime + 1) * 0.15) * 300;
         const mouseX = this.rawMouse.x * 1200;
@@ -651,7 +862,6 @@ class RoomIntro {
         this.camera.position.copy(this.currentPos);
         this.camera.lookAt(this.currentFocal);
       } else if (this.state === 'desk') {
-        // Subtle interactive mouse parallax on the 3D PC table
         const mouseX = this.rawMouse.x * 250;
         const mouseY = this.rawMouse.y * 150;
 
@@ -679,7 +889,6 @@ class RoomIntro {
       this.camera.lookAt(this.currentFocal);
 
       if (this.targetState === 'monitor') {
-        // When approaching screen, fade out container
         if (t > 0.70) {
           const fadeProgress = (t - 0.70) / 0.30;
           this.container.style.opacity = String(Math.max(0, 1.0 - fadeProgress));
@@ -695,7 +904,6 @@ class RoomIntro {
           }, 350);
         }
       } else {
-        // Zooming back to desk or idle view
         this.container.style.opacity = '1';
 
         if (t >= 1.0) {
