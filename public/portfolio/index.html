@@ -43,8 +43,52 @@
     window.addEventListener('keyup', (e) => {
       window.parent.postMessage({ type: 'keyup', key: e.key }, '*');
     });
+
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'enterMonitor') {
+        document.documentElement.classList.remove('monitor-exit');
+        document.documentElement.classList.add('monitor-enter');
+      } else if (e.data && e.data.type === 'leftMonitor') {
+        document.documentElement.classList.remove('monitor-enter');
+        document.documentElement.classList.add('monitor-exit');
+      }
+    });
   }
-</script><script>(function(){const unsupportedUrl = "https://github.com/Vansh-Sharmaa";
+</script>
+<style>
+/* Cinematic 3D Zoom Transition into Monitor */
+html.monitor-enter body {
+  animation: monitorEnter3D 2s cubic-bezier(0.13, 0.99, 0, 1) forwards;
+  transform-origin: center center;
+}
+html.monitor-exit body {
+  animation: monitorExit3D 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  transform-origin: center center;
+}
+@keyframes monitorEnter3D {
+  0% {
+    transform: perspective(1200px) scale(0.92) translateZ(-60px);
+    filter: brightness(0.7) contrast(1.15) blur(1.5px);
+  }
+  60% {
+    filter: brightness(1.18) contrast(1.05) blur(0.3px);
+  }
+  100% {
+    transform: perspective(1200px) scale(1) translateZ(0);
+    filter: brightness(1) contrast(1) blur(0px);
+  }
+}
+@keyframes monitorExit3D {
+  0% {
+    transform: perspective(1200px) scale(1) translateZ(0);
+    filter: brightness(1) contrast(1) blur(0px);
+  }
+  100% {
+    transform: perspective(1200px) scale(0.92) translateZ(-60px);
+    filter: brightness(0.65) contrast(1.2) blur(2px);
+  }
+}
+</style><script>(function(){const unsupportedUrl = "https://github.com/Vansh-Sharmaa";
 
       try {
         new Function('class A{static{}}')
