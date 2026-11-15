@@ -78,9 +78,7 @@
 
 <style>
   /* Remove old quadtree background completely */
-  #app, #app canvas[data-render-path="worker"] {
-    display: none !important;
-  }
+  /* app display preserved */
 </style>
 
 <!-- === ELECTRIC GAZE 21st.dev CANVAS2D ENGINE === -->
@@ -241,19 +239,31 @@
     ctx.fillRect(0, 0, w, h);
   }
 
-  // Scroll Fade: smoothly hide when scrolling into projects
+  // Scroll Fade: smoothly hide when scrolling into projects / carousel / last sections
   function checkScroll() {
-    const scrollEl = document.querySelector('[data-page-scroll]') || window;
-    const y = scrollEl.scrollTop !== undefined ? scrollEl.scrollTop : (window.pageYOffset || 0);
+    const scrollEl = document.querySelector('[data-page-scroll]') || document.documentElement || document.body;
+    const y = scrollEl.scrollTop || window.scrollY || window.pageYOffset || 0;
     const bodyClass = document.body.className || '';
-    const isProjectOrPage = bodyClass.includes('is--project') || bodyClass.includes('is--page') || y > 80;
+    const isScrollingPastIntro = !bodyClass.includes('is--intro') ||
+                                 bodyClass.includes('is--carousel') ||
+                                 bodyClass.includes('is--last') ||
+                                 bodyClass.includes('is--project') ||
+                                 bodyClass.includes('is--page') ||
+                                 y > 40;
     if (container) {
-      container.style.opacity = isProjectOrPage ? '0' : '1';
+      container.style.opacity = isScrollingPastIntro ? '0' : '1';
+      container.style.visibility = isScrollingPastIntro && (container.style.opacity === '0') ? 'hidden' : 'visible';
     }
   }
   window.addEventListener('scroll', checkScroll, { passive: true });
+  const scrollContainer = document.querySelector('[data-page-scroll]');
+  if (scrollContainer) {
+    scrollContainer.addEventListener('scroll', checkScroll, { passive: true });
+  }
   const observer = new MutationObserver(checkScroll);
-  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-scene'] });
+  // Also check periodically during initial moments
+  setInterval(checkScroll, 200);
   checkScroll();
 })();
 </script>
