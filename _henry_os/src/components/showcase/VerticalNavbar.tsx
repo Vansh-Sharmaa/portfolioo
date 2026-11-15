@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from '../general';
-import forHire from '../../assets/pictures/forHireGif.gif';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export interface VerticalNavbarProps {}
@@ -11,8 +10,13 @@ const VerticalNavbar: React.FC<VerticalNavbarProps> = (props) => {
     const [isHome, setIsHome] = useState(false);
 
     const navigate = useNavigate();
-    const goToContact = () => {
-        navigate('/contact');
+
+    const launch3DPortfolio = () => {
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'toggleOS' }, '*');
+        } else {
+            window.location.href = '/portfolio/index.html';
+        }
     };
 
     useEffect(() => {
@@ -34,7 +38,7 @@ const VerticalNavbar: React.FC<VerticalNavbarProps> = (props) => {
             <div style={styles.header}>
                 <h1 style={styles.headerText}>Vansh</h1>
                 <h1 style={styles.headerText}>Sharma</h1>
-                <h3 style={styles.headerShowcase}>Software 2026</h3>
+                <h3 style={styles.headerShowcase}>AI / Software 2026</h3>
             </div>
             <div style={styles.links}>
                 <Link containerStyle={styles.link} to="" text="HOME" />
@@ -42,7 +46,7 @@ const VerticalNavbar: React.FC<VerticalNavbarProps> = (props) => {
                 <Link
                     containerStyle={styles.link}
                     to="experience"
-                    text="EXPERIENCE"
+                    text="EXPERIENCE & OPEN SOURCE"
                 />
                 <Link
                     containerStyle={Object.assign(
@@ -60,7 +64,7 @@ const VerticalNavbar: React.FC<VerticalNavbarProps> = (props) => {
                             <Link
                                 containerStyle={styles.insetLink}
                                 to="projects/software"
-                                text="SOFTWARE"
+                                text="SOFTWARE & AI"
                             />
                             <Link
                                 containerStyle={styles.insetLink}
@@ -75,76 +79,76 @@ const VerticalNavbar: React.FC<VerticalNavbarProps> = (props) => {
                         </div>
                     )
                 }
-                <Link
-                    containerStyle={styles.link}
-                    to="contact"
-                    text="CONTACT"
-                />
+                <Link containerStyle={styles.link} to="contact" text="CONTACT" />
+            </div>
+
+            <div style={{ marginTop: 24, padding: '0 8px' }}>
+                <button
+                    onClick={launch3DPortfolio}
+                    style={{
+                        width: '100%',
+                        padding: '8px 4px',
+                        background: '#000080',
+                        color: '#00ffcc',
+                        border: '2px outset #ffffff',
+                        fontSize: 11,
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        fontFamily: 'MSSerif, monospace',
+                        textAlign: 'center',
+                    }}
+                >
+                    ► 3D CRT PORTFOLIO
+                </button>
             </div>
             <div style={styles.spacer} />
-            <div style={styles.forHireContainer} onMouseDown={goToContact}>
-                {/* <img src={forHire} style={styles.image} alt="" /> */}
-            </div>
         </div>
-    ) : (
-        <></>
-    );
+    ) : null;
 };
 
 const styles: StyleSheetCSS = {
     navbar: {
-        width: 300,
+        width: 170,
         height: '100%',
+        backgroundColor: '#f5f5f5',
+        borderRight: '1px solid black',
         flexDirection: 'column',
-        padding: 48,
         boxSizing: 'border-box',
-        position: 'fixed',
-        overflow: 'hidden',
     },
     header: {
         flexDirection: 'column',
-        marginBottom: 64,
+        padding: 16,
+        borderBottom: '1px solid black',
     },
     headerText: {
-        fontSize: 38,
+        fontSize: 28,
         lineHeight: 1,
     },
     headerShowcase: {
-        marginTop: 12,
-    },
-    logo: {
-        width: '100%',
-        marginBottom: 8,
-    },
-    link: {
-        marginBottom: 32,
-    },
-    expandedLink: {
-        marginBottom: 16,
-    },
-    insetLinks: {
-        flexDirection: 'column',
-        marginLeft: 32,
-        marginBottom: 16,
-    },
-    insetLink: {
-        marginBottom: 8,
+        marginTop: 8,
+        fontSize: 13,
+        color: '#666',
     },
     links: {
         flexDirection: 'column',
-        flex: 1,
-        justifyContent: 'center',
+        padding: '16px 0',
     },
-    image: {
-        width: '80%',
+    link: {
+        padding: '6px 16px',
+    },
+    expandedLink: {
+        backgroundColor: '#e0e0e0',
+    },
+    insetLinks: {
+        flexDirection: 'column',
+        paddingLeft: 16,
+        backgroundColor: '#e8e8e8',
+    },
+    insetLink: {
+        padding: '4px 16px',
     },
     spacer: {
         flex: 1,
-    },
-    forHireContainer: {
-        cursor: 'pointer',
-
-        width: '100%',
     },
 };
 

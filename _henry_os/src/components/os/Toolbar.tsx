@@ -99,6 +99,25 @@ const Toolbar: React.FC<ToolbarProps> = ({
                             <p style={styles.verticalText}>VanshOS</p>
                         </div>
                         <div style={styles.startWindowContent}>
+                            <div
+                                className="start-menu-option"
+                                style={styles.startMenuOption}
+                                onMouseDown={() => {
+                                    if (window.parent && window.parent !== window) {
+                                        window.parent.postMessage({ type: 'toggleOS' }, '*');
+                                    } else {
+                                        window.location.href = '/portfolio/index.html';
+                                    }
+                                }}
+                            >
+                                <Icon
+                                    style={styles.startMenuIcon}
+                                    icon="computerSmall"
+                                />
+                                <p style={styles.startMenuText}>
+                                    <b>3D CRT Portfolio...</b>
+                                </p>
+                            </div>
                             <div style={styles.startMenuSpace} />
                             <div style={styles.startMenuLine} />
                             <div
@@ -179,6 +198,31 @@ const Toolbar: React.FC<ToolbarProps> = ({
                             );
                         })}
                     </div>
+                </div>
+                <div
+                    onMouseDown={() => {
+                        if (window.parent && window.parent !== window) {
+                            window.parent.postMessage({ type: 'toggleOS' }, '*');
+                        } else {
+                            window.location.href = '/portfolio/index.html';
+                        }
+                    }}
+                    style={{
+                        cursor: 'pointer',
+                        padding: '2px 8px',
+                        marginRight: 6,
+                        background: '#000080',
+                        color: '#00ffcc',
+                        border: '2px outset #ffffff',
+                        fontSize: 11,
+                        fontWeight: 'bold',
+                        display: 'flex',
+                        alignItems: 'center',
+                        userSelect: 'none',
+                    }}
+                    title="Switch to 3D CRT Cylinder Portfolio"
+                >
+                    ► 3D Portfolio
                 </div>
                 <div style={styles.time}>
                     <Icon style={styles.volumeIcon} icon="volumeOn" />

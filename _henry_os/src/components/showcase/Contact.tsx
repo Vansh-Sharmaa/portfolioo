@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import colors from '../../constants/colors';
 import twitterIcon from '../../assets/pictures/contact-twitter.png';
 import ghIcon from '../../assets/pictures/contact-gh.png';
@@ -71,14 +71,8 @@ const Contact: React.FC<ContactProps> = (props) => {
                     }),
                 }
             );
-            // the response will be either {success: true} or {success: false, error: message}
-            const data = (await res.json()) as
-                | {
-                      success: false;
-                      error: string;
-                  }
-                | { success: true };
-            if (data.success) {
+            const data = (await res.json()) as any;
+            if (data && data.success) {
                 setFormMessage(`Message successfully sent. Thank you ${name}!`);
                 setCompany('');
                 setEmail('');
@@ -93,9 +87,9 @@ const Contact: React.FC<ContactProps> = (props) => {
             }
         } catch (e) {
             setFormMessage(
-                'There was an error sending your message. Please try again.'
+                'Thank you for reaching out! You can also email directly: engagevansh@gmail.com'
             );
-            setFormMessageColor(colors.red);
+            setFormMessageColor(colors.blue);
             setIsLoading(false);
         }
     }
@@ -120,7 +114,7 @@ const Contact: React.FC<ContactProps> = (props) => {
                     />
                     <SocialBox
                         icon={inIcon}
-                        link={'https://www.linkedin.com/in/vanshsharma/'}
+                        link={'https://linkedin.com/in/vnxsh'}
                     />
                     <SocialBox
                         icon={twitterIcon}
@@ -130,174 +124,137 @@ const Contact: React.FC<ContactProps> = (props) => {
             </div>
             <div className="text-block">
                 <p>
-                    I am currently employed, however if you have any
-                    opportunities, feel free to reach out - I would love to
-                    chat! You can reach me via my personal email, or fill out
-                    the form below!
+                    I'm actively seeking roles as an <b>AI Engineer / GenAI Engineer</b>. Whether you have questions about my fine-tuning pipelines, agent architectures, or want to discuss collaborating on intelligent systems, my inbox is always open!
                 </p>
                 <br />
                 <p>
-                    <b>Email: </b>
-                    <a href="mailto:contact.vanshsharma@gmail.com">
-                        contact.vanshsharma@gmail.com
+                    <b>Email:</b>{' '}
+                    <a href="mailto:engagevansh@gmail.com">
+                        engagevansh@gmail.com
                     </a>
                 </p>
-
-                <div style={styles.form}>
-                    <label>
-                        <p>
-                            {!name && <span style={styles.star}>*</span>}
-                            <b>Your name:</b>
-                        </p>
-                    </label>
+                <p>
+                    <b>Phone:</b> +91 9368478556
+                </p>
+                <p>
+                    <b>GitHub:</b>{' '}
+                    <a
+                        rel="noreferrer"
+                        target="_blank"
+                        href="https://github.com/Vansh-Sharmaa"
+                    >
+                        github.com/Vansh-Sharmaa
+                    </a>
+                </p>
+                <p>
+                    <b>LinkedIn:</b>{' '}
+                    <a
+                        rel="noreferrer"
+                        target="_blank"
+                        href="https://linkedin.com/in/vnxsh"
+                    >
+                        linkedin.com/in/vnxsh
+                    </a>
+                </p>
+            </div>
+            <ResumeDownload />
+            <div className="text-block">
+                <h3>Send a Message</h3>
+                <br />
+                <div style={styles.formItem}>
+                    <p style={styles.formInfo}>Name:</p>
                     <input
                         style={styles.formItem}
                         type="text"
-                        name="name"
-                        placeholder="Name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
-                    <label>
-                        <p>
-                            {!validateEmail(email) && (
-                                <span style={styles.star}>*</span>
-                            )}
-                            <b>Email:</b>
-                        </p>
-                    </label>
+                </div>
+                <div style={styles.formItem}>
+                    <p style={styles.formInfo}>Email:</p>
                     <input
                         style={styles.formItem}
                         type="email"
-                        name="email"
-                        placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    <label>
-                        <p>
-                            <b>Company (optional):</b>
-                        </p>
-                    </label>
+                </div>
+                <div style={styles.formItem}>
+                    <p style={styles.formInfo}>Company (optional):</p>
                     <input
                         style={styles.formItem}
-                        type="company"
-                        name="company"
-                        placeholder="Company"
+                        type="text"
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
                     />
-                    <label>
-                        <p>
-                            {!message && <span style={styles.star}>*</span>}
-                            <b>Message:</b>
-                        </p>
-                    </label>
+                </div>
+                <div style={styles.formItem}>
+                    <p style={styles.formInfo}>Message:</p>
                     <textarea
-                        name="message"
-                        placeholder="Message"
                         style={styles.formItem}
+                        rows={6}
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                     />
-                    <div style={styles.buttons}>
-                        <button
-                            className="site-button"
-                            style={styles.button}
-                            type="submit"
-                            disabled={!isFormValid || isLoading}
-                            onMouseDown={submitForm}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <button
+                        style={{
+                            padding: '8px 16px',
+                            cursor: 'pointer',
+                            background: '#c0c0c0',
+                            border: '2px outset #ffffff',
+                            fontWeight: 'bold',
+                        }}
+                        onClick={submitForm}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Sending...' : 'Send Message'}
+                    </button>
+                    {formMessage && (
+                        <p
+                            style={{
+                                marginLeft: 16,
+                                color: formMessageColor,
+                                fontWeight: 'bold',
+                            }}
                         >
-                            {!isLoading ? (
-                                'Send Message'
-                            ) : (
-                                <p className="loading">Sending</p>
-                            )}
-                        </button>
-                        <div style={styles.formInfo}>
-                            <p
-                                style={Object.assign(
-                                    {},
-                                    { color: formMessageColor }
-                                )}
-                            >
-                                <b>
-                                    <sub>
-                                        {formMessage
-                                            ? `${formMessage}`
-                                            : ' All messages get forwarded straight to my personal email'}
-                                    </sub>
-                                </b>
-                            </p>
-                            <p>
-                                <sub>
-                                    {!isFormValid ? (
-                                        <span>
-                                            <b style={styles.star}>*</b> =
-                                            required
-                                        </span>
-                                    ) : (
-                                        '\xa0'
-                                    )}
-                                </sub>
-                            </p>
-                        </div>
-                    </div>
+                            {formMessage}
+                        </p>
+                    )}
                 </div>
             </div>
-            <ResumeDownload altText="Need a copy of my Resume?" />
         </div>
     );
 };
 
 const styles: StyleSheetCSS = {
-    form: {
-        flexDirection: 'column',
-        marginTop: 32,
-    },
-    formItem: {
-        marginTop: 4,
-        marginBottom: 16,
-    },
-    socialImage: {
-        width: 36,
-        height: 36,
-    },
-    buttons: {
+    header: {
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-    formInfo: {
-        textAlign: 'right',
-
-        flexDirection: 'column',
-        alignItems: 'flex-end',
-        paddingLeft: 24,
-    },
-    star: {
-        paddingRight: 4,
-        color: 'red',
-    },
-    button: {
-        minWidth: 184,
-        height: 32,
-    },
-    header: {
-        alignItems: 'flex-end',
-        justifyContent: 'space-between',
     },
     socials: {
-        marginBottom: 16,
-        justifyContent: 'flex-end',
+        display: 'flex',
+        gap: 12,
     },
     social: {
-        width: 4,
-        height: 4,
-        // borderRadius: 1000,
-
+        width: 38,
+        height: 38,
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: 8,
+        cursor: 'pointer',
+    },
+    socialImage: {
+        width: 28,
+        height: 28,
+    },
+    formItem: {
+        width: '100%',
+        marginBottom: 12,
+    },
+    formInfo: {
+        marginBottom: 4,
+        fontWeight: 'bold',
     },
 };
 

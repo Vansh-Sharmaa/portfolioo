@@ -1,7 +1,5 @@
 import React from 'react';
 import { Link } from '../general';
-
-import forhire from '../../assets/pictures/forHireGif.gif';
 import { useNavigate } from 'react-router-dom';
 
 export interface HomeProps {}
@@ -13,18 +11,29 @@ const Home: React.FC<HomeProps> = (props) => {
         navigate('/contact');
     };
 
+    const launch3DPortfolio = () => {
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'toggleOS' }, '*');
+        } else {
+            window.location.href = '/portfolio/index.html';
+        }
+    };
+
     return (
         <div style={styles.page}>
             <div style={styles.header}>
                 <h1 style={styles.name}>Vansh Sharma</h1>
-                <h2>Software Engineer & Creative Developer</h2>
+                <h2>AI/ML Engineer & Creative Technologist</h2>
+                <p style={{ marginTop: 8, fontSize: 16, color: '#333' }}>
+                    LLM Fine-Tuning (QLoRA) • LangChain / LangGraph Multi-Agent Orchestration • Production RAG
+                </p>
             </div>
             <div style={styles.buttons}>
                 <Link containerStyle={styles.link} to="about" text="ABOUT" />
                 <Link
                     containerStyle={styles.link}
                     to="experience"
-                    text="EXPERIENCE"
+                    text="EXPERIENCE & OPEN SOURCE"
                 />
                 <Link
                     containerStyle={styles.link}
@@ -37,8 +46,27 @@ const Home: React.FC<HomeProps> = (props) => {
                     text="CONTACT"
                 />
             </div>
+
+            <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <button
+                    onClick={launch3DPortfolio}
+                    style={{
+                        padding: '12px 24px',
+                        background: '#000080',
+                        color: '#00ffcc',
+                        border: '3px outset #ffffff',
+                        fontSize: 15,
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        fontFamily: 'MSSerif, monospace',
+                        boxShadow: '2px 2px 0px #000'
+                    }}
+                >
+                    ► ENTER 3D CRT CYLINDER PORTFOLIO
+                </button>
+            </div>
+
             <div style={styles.forHireContainer} onMouseDown={goToContact}>
-                {/* <img src={forhire} alt="" /> */}
             </div>
         </div>
     );
@@ -57,37 +85,38 @@ const styles: StyleSheetCSS = {
     },
     header: {
         textAlign: 'center',
-        marginBottom: 64,
-        marginTop: 64,
-
+        marginBottom: 48,
+        marginTop: 48,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
     },
     buttons: {
         justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: 8,
     },
     image: {
         width: 800,
     },
     link: {
-        padding: 16,
+        padding: 12,
     },
     nowHiring: {
         backgroundColor: 'red',
         padding: 16,
     },
     forHireContainer: {
-        marginTop: 64,
+        marginTop: 32,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         cursor: 'pointer',
     },
     name: {
-        fontSize: 72,
-        marginBottom: 16,
-        lineHeight: 0.9,
+        fontSize: 64,
+        marginBottom: 12,
+        lineHeight: 0.95,
     },
 };
 

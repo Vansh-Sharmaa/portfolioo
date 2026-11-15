@@ -37,7 +37,7 @@ const CREDITS = [
     {
         title: 'Inspiration',
         rows: [
-            ['Henry Heffernan (Original 3D Concept)', 'Bruno Simon'],
+            ['Vansh Sharma (Interactive 3D Portfolio)', 'Bruno Simon'],
             ['Pink Yellow', 'Vivek Patel'],
         ],
     },

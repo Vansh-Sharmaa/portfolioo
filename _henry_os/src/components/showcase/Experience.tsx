@@ -7,232 +7,147 @@ const Experience: React.FC<ExperienceProps> = (props) => {
     return (
         <div className="site-page-content">
             <ResumeDownload />
+
+            {/* SECTION 1: OPEN SOURCE & AGENTIC ENGINEERING */}
             <div style={styles.headerContainer}>
                 <div style={styles.header}>
                     <div style={styles.headerRow}>
-                        <h1>Hover</h1>
+                        <h1>Open Source AI & GenAI Systems</h1>
                         <a
                             rel="noreferrer"
                             target="_blank"
-                            href={'https://hover.gg/'}
+                            href={'https://github.com/Vansh-Sharmaa'}
                         >
-                            <h4>www.hover.gg</h4>
+                            <h4>github.com/Vansh-Sharmaa</h4>
                         </a>
                     </div>
                     <div style={styles.headerRow}>
-                        <h3>Frontend Engineer</h3>
+                        <h3>AI/ML Engineer & Open Source Builder</h3>
                         <b>
-                            <p>Summer 2020 - Fall 2021</p>
+                            <p>2023 - Present</p>
                         </b>
                     </div>
                 </div>
             </div>
             <div className="text-block">
                 <p>
-                    Targeted towards online content creators and streamers
-                    looking to build a brand, Hover is the home of over 150K
-                    users. Written in Typescript using React, React-Native,
-                    Framer, Express, and Redux.
+                    Actively architecting, releasing, and evaluating production-grade LLM applications, cyclic multi-agent systems, and parameter-efficient fine-tuning workflows in the open-source ecosystem.
                 </p>
                 <br />
                 <ul>
                     <li>
                         <p>
-                            Architected and engineered the vertical scrolling
-                            discover player which, at its daily peak, was
-                            responsible for generating over 600,000 views across
-                            20,000 active users.
+                            <b>Multi-Agent Orchestration:</b> Designed and deployed cyclic, fault-tolerant agentic architectures using <b>LangGraph and LangChain</b>, featuring specialized roles (Searcher, Scraper, Synthesizer, Critic) with dynamic revision loops.
                         </p>
                     </li>
                     <li>
                         <p>
-                            Designed and implemented multiple features to
-                            increase app usability and user experience while
-                            ensuring the quality, maintainability and
-                            scalability of the front end as the user base grew
-                            by over 50,000.
+                            <b>LLM Fine-Tuning & Quantization:</b> Hands-on fine-tuning of open-weights models (Llama 3.2, Llama 3.1) with <b>QLoRA using Unsloth</b>. Quantized checkpoints down to 4-bit GGUF for low-latency local execution on consumer hardware with zero cloud API costs.
                         </p>
                     </li>
                     <li>
                         <p>
-                            Coordinated major refactors targeted towards app
-                            optimization and performance resulting in a smoother
-                            user experience and accomplished by eliminating
-                            redundant re-renders and API calls by over 50%.
+                            <b>Production RAG Pipelines:</b> Built and evaluated high-precision vector search platforms utilizing <b>FAISS, Sentence Transformers, and LangChain MapReduce summarization</b> for legal and technical corpora exceeding 10,000+ words.
                         </p>
                     </li>
                     <li>
                         <p>
-                            Directed and executed an internal migration of 3
-                            individual repositories to a single monorepo,
-                            greatly reducing overhead for developing new
-                            features, fixing bugs, and managing dependencies.
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Rebuilt the website with React and shared mobile app
-                            components allowing users to access a wide variety
-                            of app interactions entirely on the web, resulting
-                            in over 700,000 total site visits.
+                            <b>Asynchronous Microservices:</b> Deployed high-throughput FastAPI inference services and interactive Streamlit control dashboards with resilient state persistence and retry logic.
                         </p>
                     </li>
                 </ul>
             </div>
+
+            {/* SECTION 2: SPECIALIZED CERTIFICATIONS & FELLOWSHIPS */}
             <div style={styles.headerContainer}>
                 <div style={styles.header}>
                     <div style={styles.headerRow}>
-                        <h1>BrACS</h1>
+                        <h1>Google AI Agents Intensive</h1>
                         <a
                             target="_blank"
                             rel="noreferrer"
-                            href={'https://bracs.co/'}
+                            href={'https://www.kaggle.com'}
                         >
-                            <h4>www.bracs.co</h4>
+                            <h4>Kaggle / Google</h4>
                         </a>
                     </div>
                     <div style={styles.headerRow}>
-                        <h3>Team Lead & Engineer</h3>
+                        <h3>Certified Autonomous Agent Architect</h3>
                         <b>
-                            <p>Fall 2021 - Spring 2022</p>
+                            <p>2024</p>
                         </b>
                     </div>
                 </div>
             </div>
             <div className="text-block">
                 <p>
-                    Supervised and developed the front end of bracs.co, a
-                    beautifully simple and effective bracket creation and
-                    management engine. Written in Typescript using React and
-                    deployed using AWS Elastic Beanstalk.
+                    Rigorous specialization covering modern agent engineering, multi-turn state preservation, and next-generation agent coordination protocols.
                 </p>
                 <br />
                 <ul>
                     <li>
                         <p>
-                            Managed the project and team members by conducting
-                            bi-weekly stand-ups.
+                            Mastered foundational and emerging <b>agent architectures</b>: ReAct, Plan-and-Solve, and cyclic graph-based agents.
                         </p>
                     </li>
                     <li>
                         <p>
-                            Architected bracket view UI using React Flow and
-                            custom bracket data types built from binary trees.
+                            Engineered robust <b>agent-to-agent (A2A) communication patterns</b>, tool-calling validation, and structured output enforcement.
                         </p>
                     </li>
                     <li>
                         <p>
-                            Created conversion algorithms to serialize bracket
-                            tree data to allow for saving in the cloud.
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Implemented bracket generation utilities which
-                            employ gray code for proper team seeding and
-                            placement.
+                            Evaluated hallucination mitigation techniques via real-time contextual grounding and web retrieval hooks.
                         </p>
                     </li>
                 </ul>
             </div>
+
+            {/* SECTION 3: ACADEMIC & HACKATHON ACHIEVEMENTS */}
             <div style={styles.headerContainer}>
                 <div style={styles.header}>
                     <div style={styles.headerRow}>
-                        <h1>K-F/X</h1>
+                        <h1>Competitions & Applied Industry Simulations</h1>
                         <a
                             target="_blank"
                             rel="noreferrer"
-                            href={'https://kfxnyc.com/'}
+                            href={'https://github.com/Vansh-Sharmaa'}
                         >
-                            <h4>www.kfxnyc.com</h4>
+                            <h4>Portfolio Showcase</h4>
                         </a>
                     </div>
                     <div style={styles.headerRow}>
-                        <h3>Special Effects Technician</h3>
+                        <h3>National Hackathon Participant & Deloitte Simulation</h3>
                         <b>
-                            <p>Fall 2019, Summer 2021</p>
+                            <p>2024 - 2025</p>
                         </b>
                     </div>
                 </div>
             </div>
             <div className="text-block">
                 <p>
-                    Applied problem solving and technical skills to operate
-                    large equipment such as rain machines, fog machines, small
-                    explosives and general rigging with a professional crew of
-                    50+ people.
+                    Applied analytical and machine learning capabilities to real-world corporate data and hackathon problem statements.
                 </p>
                 <br />
-                <h3 style={styles.indent}>Screen Credits:</h3>
                 <ul>
-                    <li style={styles.row}>
-                        <p>• Ray Donovan</p>
+                    <li>
                         <p>
-                            [{' '}
-                            <a
-                                href="https://www.sho.com/ray-donovan"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                SHOWTIME
-                            </a>{' '}
-                            ]
+                            <b>National-Level Hackathon:</b> Competed in the AI-Driven Solutions track, engineering rapid proof-of-concept AI pipelines under strict 24-48 hour delivery constraints.
                         </p>
                     </li>
-                    <li style={styles.row}>
-                        <p>• Ray Donovan: The Movie</p>
+                    <li>
                         <p>
-                            [{' '}
-                            <a
-                                href="https://www.sho.com/titles/3508117/ray-donovan-the-movie"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                SHOWTIME
-                            </a>{' '}
-                            ]
+                            <b>Deloitte Australia Data Analytics Simulation (2025):</b> Executed data analysis, forensic telemetry evaluation, and executive presentation of findings.
                         </p>
                     </li>
-                    <li style={styles.row}>
-                        <p>• Hightown</p>
+                    <li>
                         <p>
-                            [{' '}
-                            <a
-                                href="https://www.starz.com/us/en/series/hightown/57463"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                STARZ
-                            </a>{' '}
-                            ]
+                            <b>Master of Computer Applications (AI & Data Science):</b> Graphic Era Hill University (2024–2026), CGPA: <b>8.0 / 10</b>.
                         </p>
                     </li>
-                    <li style={styles.row}>
-                        <p>• Bull</p>
+                    <li>
                         <p>
-                            [{' '}
-                            <a
-                                href="https://www.cbs.com/shows/bull/"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                CBS
-                            </a>{' '}
-                            ]
-                        </p>
-                    </li>
-                    <li style={styles.row}>
-                        <p>• At Home with Amy Sedaris</p>
-                        <p>
-                            [{' '}
-                            <a
-                                href="https://www.trutv.com/shows/at-home-with-amy-sedaris"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                truTV
-                            </a>{' '}
-                            ]
+                            <b>Bachelor of Computer Applications:</b> DIT University (2021–2024), CGPA: <b>7.7 / 10</b>.
                         </p>
                     </li>
                 </ul>
@@ -247,46 +162,17 @@ const styles: StyleSheetCSS = {
         justifyContent: 'space-between',
         width: '100%',
     },
-    skillRow: {
-        flex: 1,
-        justifyContent: 'space-between',
-    },
-    skillName: {
-        minWidth: 56,
-    },
-    skill: {
-        flex: 1,
-        padding: 8,
-        alignItems: 'center',
-    },
-    progressBar: {
-        flex: 1,
-        background: 'red',
-        marginLeft: 8,
-        height: 8,
-    },
-    hoverLogo: {
-        height: 32,
-        marginBottom: 16,
-    },
     headerContainer: {
         alignItems: 'flex-end',
         width: '100%',
-        justifyContent: 'center',
-    },
-    hoverText: {
-        marginBottom: 8,
-    },
-    indent: {
-        marginLeft: 24,
+        justifyContent: 'space-between',
     },
     headerRow: {
         justifyContent: 'space-between',
         alignItems: 'flex-end',
     },
-    row: {
-        display: 'flex',
-        justifyContent: 'space-between',
+    indent: {
+        marginLeft: 24,
     },
 };
 

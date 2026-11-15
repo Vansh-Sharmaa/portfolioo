@@ -131,58 +131,60 @@ export default class MonitorScreen extends EventEmitter {
         const iframe = document.createElement('iframe');
 
         // Bubble mouse move events to the main application, so we can affect the camera
-        iframe.onload = () => {
-            if (iframe.contentWindow) {
-                window.addEventListener('message', (event) => {
-                    if (event.data && event.data.type === 'exitToDesk') {
-                        this.camera.trigger('leftMonitor');
-                        return;
-                    }
-                    if (event.data && event.data.type === 'toggleOS') {
-                        if (iframe.src.includes('portfolio')) {
-                            iframe.src = '/os/index.html';
-                        } else {
-                            iframe.src = '/portfolio/index.html';
-                        }
-                        return;
-                    }
-                    if (event.data && event.data.type === 'enterMonitor') {
-                        this.camera.trigger('enterMonitor');
-                        return;
-                    }
-
-                    var evt = new CustomEvent(event.data.type, {
-                        bubbles: true,
-                        cancelable: false,
-                    });
-
-                    // @ts-ignore
-                    evt.inComputer = true;
-                    if (event.data.type === 'mousemove') {
-                        var clRect = iframe.getBoundingClientRect();
-                        const { top, left, width, height } = clRect;
-                        const widthRatio = width / IFRAME_SIZE.w;
-                        const heightRatio = height / IFRAME_SIZE.h;
-
-                        // @ts-ignore
-                        evt.clientX = Math.round(
-                            event.data.clientX * widthRatio + left
-                        );
-                        //@ts-ignore
-                        evt.clientY = Math.round(
-                            event.data.clientY * heightRatio + top
-                        );
-                    } else if (event.data.type === 'keydown') {
-                        // @ts-ignore
-                        evt.key = event.data.key;
-                    } else if (event.data.type === 'keyup') {
-                        // @ts-ignore
-                        evt.key = event.data.key;
-                    }
-
-                    iframe.dispatchEvent(evt);
-                });
+        // Register message listener once on window so multiple iframe loads don't duplicate handlers
+        window.addEventListener('message', (event) => {
+            if (!event.data) return;
+            if (event.data.type === 'exitToDesk') {
+                this.camera.trigger('leftMonitor');
+                return;
             }
+            if (event.data.type === 'toggleOS') {
+                if (iframe.src.includes('portfolio')) {
+                    iframe.src = '/os/index.html';
+                } else {
+                    iframe.src = '/portfolio/index.html';
+                }
+                return;
+            }
+            if (event.data.type === 'enterMonitor') {
+                this.camera.trigger('enterMonitor');
+                return;
+            }
+
+            var evt = new CustomEvent(event.data.type, {
+                bubbles: true,
+                cancelable: false,
+            });
+
+            // @ts-ignore
+            evt.inComputer = true;
+            if (event.data.type === 'mousemove') {
+                var clRect = iframe.getBoundingClientRect();
+                const { top, left, width, height } = clRect;
+                const widthRatio = width / IFRAME_SIZE.w;
+                const heightRatio = height / IFRAME_SIZE.h;
+
+                // @ts-ignore
+                evt.clientX = Math.round(
+                    event.data.clientX * widthRatio + left
+                );
+                //@ts-ignore
+                evt.clientY = Math.round(
+                    event.data.clientY * heightRatio + top
+                );
+            } else if (event.data.type === 'keydown') {
+                // @ts-ignore
+                evt.key = event.data.key;
+            } else if (event.data.type === 'keyup') {
+                // @ts-ignore
+                evt.key = event.data.key;
+            }
+
+            iframe.dispatchEvent(evt);
+        });
+
+        iframe.onload = () => {
+            // iframe loaded
         };
 
         // Listen for screen mode change from HUD

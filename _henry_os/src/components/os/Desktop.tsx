@@ -84,7 +84,40 @@ const Desktop: React.FC<DesktopProps> = (props) => {
     }, [shutdown]);
 
     useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'F2') {
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage({ type: 'toggleOS' }, '*');
+                } else {
+                    window.location.href = '/portfolio/index.html';
+                }
+            } else if (e.key === 'Escape') {
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage({ type: 'exitToDesk' }, '*');
+                } else {
+                    window.location.href = '/';
+                }
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
+    useEffect(() => {
         const newShortcuts: DesktopShortcutProps[] = [];
+        // Add 3D CRT Portfolio shortcut at the top
+        newShortcuts.push({
+            shortcutName: '3D CRT Portfolio',
+            icon: 'computerBig',
+            onOpen: () => {
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage({ type: 'toggleOS' }, '*');
+                } else {
+                    window.location.href = '/portfolio/index.html';
+                }
+            },
+        });
+
         Object.keys(APPLICATIONS).forEach((key) => {
             const app = APPLICATIONS[key];
             newShortcuts.push({
