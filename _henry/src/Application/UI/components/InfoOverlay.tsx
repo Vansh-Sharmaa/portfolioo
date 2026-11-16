@@ -7,7 +7,7 @@ interface InfoOverlayProps {
 }
 
 const NAME_TEXT = 'Vansh Sharma';
-const TITLE_TEXT = 'Software Engineer';
+const TITLE_TEXT = '';
 const MULTIPLIER = 1;
 
 const InfoOverlay: React.FC<InfoOverlayProps> = ({ visible }) => {
@@ -59,18 +59,16 @@ const InfoOverlay: React.FC<InfoOverlayProps> = ({ visible }) => {
         if (visible && nameText == '') {
             setTimeout(() => {
                 typeText(0, '', NAME_TEXT, setNameText, () => {
-                    typeText(0, '', TITLE_TEXT, setTitleText, () => {
-                        typeText(
-                            0,
-                            '',
-                            time,
-                            setTimeText,
-                            () => {
-                                setTextDone(true);
-                            },
-                            timeRef
-                        );
-                    });
+                    typeText(
+                        0,
+                        '',
+                        time,
+                        setTimeText,
+                        () => {
+                            setTextDone(true);
+                        },
+                        timeRef
+                    );
                 });
             }, 400);
         }
