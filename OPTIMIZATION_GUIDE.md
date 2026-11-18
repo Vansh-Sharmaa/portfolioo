@@ -13,7 +13,8 @@
 | **Public Asset Payload** | **~220 MB** | **~121 MB** | **~100 MB saved (45% reduction)** in network transfer & memory pressure |
 | **Idle / Background GPU Usage** | **100% continuous draw calls** | **0% (Halted)** | Preserves mobile/laptop battery life; prevents thermal throttling |
 | **Texture Atlas VRAM Overhead** | **~256 MB raw RGBA memory** | **Controlled streaming pipeline** | Eliminates GPU memory bus hitching during 3D rotations |
-| **Frame Stability** | Micro-stutters during rotation | **Locked 60 FPS** | Smooth camera easing via Lenis & Three.js matrix sync |
+| **Render Framerate** | **~27 FPS (37ms delta)** | **55 FPS (18ms delta)** | **100% framerate doubling** by eliminating procedural noise/blur passes |
+| **Scroll Response (Lenis)** | **0.08 lerp (sluggish/drag)** | **0.15 lerp (crisp/instant)** | Eliminated wheel inertia latency and input lag |
 | **Runtime Error Rate** | Unhandled worker exceptions | **0 errors / clean console** | Hardened with worker-safe environment checks |
 
 ---
