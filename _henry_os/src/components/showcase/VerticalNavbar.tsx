@@ -102,6 +102,7 @@ const styles: StyleSheetCSS = {
         borderRight: '1px solid black',
         flexDirection: 'column',
         boxSizing: 'border-box',
+        flexShrink: 0,
     },
     header: {
         flexDirection: 'column',

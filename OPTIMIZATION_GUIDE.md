@@ -191,5 +191,29 @@ The 3D rotating CRT corridor showcases four full-stack AI/ML engineering project
     `"AI/ML Engineer & Creative Technologist specializing in autonomous multi-agent systems, LLM fine-tuning, and interactive 3D web applications."`
   - Replaced boilerplate web agency claims in the About section with authentic AI/ML engineering narratives detailing multi-agent architectures, parameter-efficient fine-tuning (QLoRA), and high-throughput microservices.
 - **Production Bundle Synchronization**:
-  - Recompiled the Retro Windows 95 application (`npm run build` in `_henry_os`) into an optimized, zero-warning bundle (`main.f2649ea3.js`), deployed cleanly to `public/os/` alongside updated cache-busting references.
+  - Recompiled the Retro Windows 95 application (`npm run build` in `_henry_os`) into an optimized, zero-warning bundle (`main.5b4f7278.js`), deployed cleanly to `public/os/` alongside updated cache-busting references.
+
+
+## 8. Retro OS Window Content Proportions & 300px Void Elimination
+- **Problem**: When browsing the Retro Windows 95 showcase window, every page (About, Experience, Projects, Contact) exhibited a massive **316-pixel blank white empty gap** on the left of all headings, text blocks, and resume downloads, squishing the content against the right edge.
+- **Root Cause**:
+  - In Henry Heffernan's original codebase, the navigation bar was `position: fixed; width: 300px;`, requiring `.site-page-content` to have `margin-left: 300px;` to clear it.
+  - When the navigation bar was later refactored to standard flex flow (`width: 170px;` without `position: fixed;`), the legacy `margin-left: 300px;` in `index.css` remained active. This added an extra 300px margin *on top* of the 170px navbar, leaving 316px of wasted white space and causing horizontal content overflow.
+- **Solution**:
+  - In `_henry_os/src/index.css`, converted `.site-page-content` from fixed margin layout to modern responsive flex child:
+    ```css
+    .site-page-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 32px 40px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    ```
+  - Added `flexShrink: 0` to `VerticalNavbar.tsx` so the sidebar remains rigid at 170px while the content container smoothly adapts to available window space.
+  - Removed ad-hoc `marginLeft: -16` from `About.tsx`'s `<h1>Welcome</h1>`.
+  - Recompiled and verified across all tabs (About, Experience, Projects, Contact), reducing the empty gap from **316px to 39px** of clean, balanced typographic padding.
 

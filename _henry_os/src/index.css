@@ -258,12 +258,12 @@ input:active {
 .site-page-content {
     display: flex;
     flex-direction: column;
-    margin-left: 300px;
-    width: 100%;
-    padding: 64px;
-    padding-top: 32px;
-    padding-left: 16px;
-    overflow-y: scroll;
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 32px 40px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .router-link:visited {
