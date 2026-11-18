@@ -140,3 +140,7 @@ The 3D rotating CRT corridor showcases four full-stack AI/ML engineering project
 - **Responsive Header Engineering**: Replaced fixed 340px-wide overlay buttons that obstructed mobile viewports with responsive icon badges (`⇱` and `💾`) in the top navigation bar.
 - **Mobile Drawer Quick-Navigation**: Integrated full-width 1-tap navigation items (`⇱ Return to 3D Desk` and `💾 Retro Windows 95`) directly inside the mobile slide-out menu drawer (`#menu-list`) with 44px+ touch targets conforming to Apple HIG and Google Material guidelines.
 - **Zero Horizontal Overflow**: Verified `scrollWidth === clientWidth` across all standard mobile viewports (iPhone SE 375px, iPhone 14 390px, Pixel 7 412px, iPad 768px).
+
+### 6. Instant In-App Resume Viewer & Downloader
+- **Zero-Latency Real-Time Preview**: Rather than forcing a raw GitHub link download (which cannot be viewed inline on mobile or browsers without downloads), generated a 1700×2200 retina-sharp WebP document render (369 KB) served directly alongside the raw vector PDF (`public/resume.pdf`, 61 KB).
+- **In-App Modal**: Accessible via the header `📄 RESUME` badge, the mobile menu drawer, or the `[R]` keyboard shortcut. Includes 1-click `↓ DOWNLOAD` (`Vansh_Sharma_Resume.pdf`), `↗ OPEN FULLSCREEN` (direct tab link), and `[ESC]` dismiss. Zero external network latency, 100% offline-ready.
