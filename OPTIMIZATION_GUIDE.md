@@ -169,3 +169,11 @@ The 3D rotating CRT corridor showcases four full-stack AI/ML engineering project
   2. **Single-Page Smooth Section Scroll (`public/portfolio/index.html`)**: Converted the menu links (`HOME 01`, `PROJECTS 02`, `ABOUT 03`, `CONTACT 04`) into in-page smooth-scroll handlers (`window.navigateToSection`) driving the Lenis smooth scroll engine to their exact progress offsets.
   3. **Cleaned Dead Boilerplate Links**: Completely removed dummy placeholder links (`ARTICLES`, `TOOLS`, `CREDITS`) that had no corresponding sections and triggered route fallbacks.
   4. **Global Click Interceptor**: Added a capture-phase click listener in `public/portfolio/index.html` intercepting any remaining relative links (`/`, `/about`, `/contact`, `/privacy`), preventing default iframe navigation and redirecting to the corresponding in-page section.
+
+
+## High-Contrast Menu Visibility Fix
+- **Problem**: In `public/portfolio/index.html`, when the user was in `.is--carousel` or on white/light sections of the page, `data-menu-backdrop` became white (`lg:in-[.is--carousel]:bg-white/75`), causing white text (`Retro Windows 95`, `View / Download Resume`, `home 01`, `projects 02`, `about 03`, `contact 04`) to blend invisibly into the background (white-on-white).
+- **Solution**:
+  - Replaced the white backdrop with a cinematic dark frosted glass scrim (`bg-black/85 backdrop-blur-md`).
+  - Added a dedicated `#menu-contrast-fix` styling block ensuring `#menu-list` is housed in a high-contrast dark glass container (`rgba(14, 14, 18, 0.96)` with subtle border and deep shadow).
+  - Enforced crisp `#ffffff` text on all buttons and spans, with secondary labels in clean silver (`rgba(255, 255, 255, 0.65)`) and vibrant electric blue (`#2563eb`) on hover.
