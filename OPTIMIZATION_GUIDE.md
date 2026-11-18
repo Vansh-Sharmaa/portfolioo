@@ -217,3 +217,18 @@ The 3D rotating CRT corridor showcases four full-stack AI/ML engineering project
   - Removed ad-hoc `marginLeft: -16` from `About.tsx`'s `<h1>Welcome</h1>`.
   - Recompiled and verified across all tabs (About, Experience, Projects, Contact), reducing the empty gap from **316px to 39px** of clean, balanced typographic padding.
 
+
+## 9. Retro OS Resume Link Fix & Real-Time Viewer Integration
+- **Problem**: In the Retro OS showcase window, clicking "Looking for my resume? Click here to download it!" triggered a navigation that loaded the modern corridor portfolio website instead of viewing or downloading the PDF.
+- **Root Cause**:
+  - The React component imported `Vansh_Sharma_Resume.pdf`, which CRA bundled to a relative path `./static/media/Vansh_Sharma_Resume.[hash].pdf`.
+  - In `public/os/index.html`, `<base target="_parent">` caused this link to navigate the parent window to `http://127.0.0.1:5173/static/media/...`.
+  - Because Vite did not have `static/media/` at the root, it served `index.html` via SPA fallback.
+  - In `index.html`, the iframe recursion guard (`if (window.top !== window.self) window.location.replace('/portfolio/index.html');`) detected it was inside an iframe and redirected to the portfolio website.
+- **Solution**:
+  - **Direct Root Routing**: Copied static media assets so `public/static/media/` and `public/os/resume.pdf` serve the exact PDF with HTTP 200 and Content-Type `application/pdf`.
+  - **Retro Dual-Action UI**: Upgraded `ResumeDownload.tsx` with two vintage-styled Windows 95 action buttons:
+    - `👁 VIEW REAL-TIME RESUME`: Dispatches `openResume` message to the parent window, instantly opening the full-resolution in-app retina document modal over the 3D desk with zero page navigation.
+    - `↓ DOWNLOAD PDF`: Clean direct anchor to `/resume.pdf` with `download="Vansh_Sharma_Resume.pdf"` attribute, triggering native browser file download without touching the iframe or router.
+  - **Global Parent Integration**: Added the high-resolution resume viewer modal and postMessage listener to `index.html` (3D desk) with backdrop click and `[ESC]` dismiss.
+
