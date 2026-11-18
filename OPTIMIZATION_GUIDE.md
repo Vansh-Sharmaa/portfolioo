@@ -232,3 +232,18 @@ The 3D rotating CRT corridor showcases four full-stack AI/ML engineering project
     - `↓ DOWNLOAD PDF`: Clean direct anchor to `/resume.pdf` with `download="Vansh_Sharma_Resume.pdf"` attribute, triggering native browser file download without touching the iframe or router.
   - **Global Parent Integration**: Added the high-resolution resume viewer modal and postMessage listener to `index.html` (3D desk) with backdrop click and `[ESC]` dismiss.
 
+
+## 10. In-App Resume Modal Full-Document Scrolling & Lenis Conflict Fix
+- **Problem**: When opening the in-app resume viewer modal, the lower half of the resume (Projects, LexAI, NetSentinel, Hackathon & Kaggle Certifications) was cut off, and scrolling using the mouse wheel, trackpad, or scrollbar was completely disabled (`scrollHeight == clientHeight`).
+- **Root Causes**:
+  1. **Flex Box Constraint**: `#resume-viewer-container` had `display: flex; justify-content: center;`, which stretched its child container to 100% of the viewport height with `overflow: hidden;`. This artificially clamped the document's render box to 670px, preventing the browser from registering the image's full 2200px natural height.
+  2. **Lenis Global Wheel Hijacking**: In Website 2, Lenis Smooth Scroll captured global wheel events on `window` and called `preventDefault()`, blocking native scroll within the modal because the container lacked `data-lenis-prevent="true"`.
+  3. **3D Room Camera Interception**: In Website 1 (`index.html`), the global wheel handler intercepted wheel ticks and attempted to trigger camera navigation rather than allowing the modal body to consume the event.
+- **Solution**:
+  - Converted `#resume-viewer-container` from stretched flex layout to natural block layout (`display: block; min-height: 0; padding: 24px 16px;`) with `margin: 0 auto;` on the document card, allowing the document to stretch to its full 1067px+ render height.
+  - Added `data-lenis-prevent="true"` to `#resume-modal`, the dialog container, and `#resume-viewer-container`.
+  - Added `e.stopPropagation()` handlers on `wheel` and `touchmove` directly on `#resume-viewer-container`.
+  - Added modal state guards in `index.html`'s wheel listener (`if (resModal && resModal.style.display !== 'none') return;`).
+  - Added high-visibility electric cyan scrollbar styles (`::-webkit-scrollbar-thumb: rgba(0, 255, 204, 0.6)`), giving users clear visual affordance and smooth drag/wheel scrolling all the way to the bottom.
+  - Updated the status bar hint to: `↕ SCROLL TO VIEW FULL RESUME · PRESS [ESC] OR CLICK OUTSIDE TO CLOSE`.
+
