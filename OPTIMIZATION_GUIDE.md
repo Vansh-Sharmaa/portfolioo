@@ -144,3 +144,19 @@ The 3D rotating CRT corridor showcases four full-stack AI/ML engineering project
 ### 6. Instant In-App Resume Viewer & Downloader
 - **Zero-Latency Real-Time Preview**: Rather than forcing a raw GitHub link download (which cannot be viewed inline on mobile or browsers without downloads), generated a 1700×2200 retina-sharp WebP document render (369 KB) served directly alongside the raw vector PDF (`public/resume.pdf`, 61 KB).
 - **In-App Modal**: Accessible via the header `📄 RESUME` badge, the mobile menu drawer, or the `[R]` keyboard shortcut. Includes 1-click `↓ DOWNLOAD` (`Vansh_Sharma_Resume.pdf`), `↗ OPEN FULLSCREEN` (direct tab link), and `[ESC]` dismiss. Zero external network latency, 100% offline-ready.
+
+
+## 3D Vintage Chassis Branding (Monitor & Computer Case Badges)
+- **Problem**: The rear chassis stickers on the CRT monitor and desktop computer tower displayed third-party legacy branding ('Heffernan 2022 Showcase', 'henry inc', and outdated mock copy).
+- **Solution**:
+  - Extracted exact 3D UV regions in aked_computer.jpg (4096x4096):
+    - Monitor Back Badge: (1695, 534) to (1835, 748) (rotated 270 deg in texture).
+    - Computer Tower Badge: (2774, 3294) to (2994, 3440).
+  - Replaced with high-fidelity vintage badge:
+    - Title: Vansh Sharma 2026 Showcase
+    - Subtitle: Vansh Inc.
+    - Body: Making specialized interactive 3D computing & AI systems since 2024. Conceived as an interactive showcase of real-time 3D web craft, this computer showcases all that Vansh Sharma has to offer!
+    - Specs: Model No. VS-2026, AC Input 100-240VAC, 16A-8A 50-60Hz
+    - Logo & Barcode: Wireframe globe emblem with Vansh Sharma and Vansh Inc., authentic barcode with digits.
+    - Footer: Engineered by Vansh Sharma
+  - Applied with anti-aliased edge masking to preserve 100% of the original casing plastic bevels and corner drop-shadows with zero seam artifacts across all texture files (public/models/Computer/, public/room/, and _henry/).

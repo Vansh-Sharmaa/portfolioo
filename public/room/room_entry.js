@@ -39,7 +39,7 @@ class RoomIntro {
 
     this.camera = new THREE.PerspectiveCamera(35, this.width / this.height, 100, 100000);
     
-    // Camera Keyframes (Coordinates matching Henry Heffernan's isometric room)
+    // Camera Keyframes (Coordinates for isometric desk room)
     this.keyframes = {
       // Wide room view: desk sitting in center with "Click anywhere to begin"
       idle: {
