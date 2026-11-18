@@ -177,3 +177,19 @@ The 3D rotating CRT corridor showcases four full-stack AI/ML engineering project
   - Replaced the white backdrop with a cinematic dark frosted glass scrim (`bg-black/85 backdrop-blur-md`).
   - Added a dedicated `#menu-contrast-fix` styling block ensuring `#menu-list` is housed in a high-contrast dark glass container (`rgba(14, 14, 18, 0.96)` with subtle border and deep shadow).
   - Enforced crisp `#ffffff` text on all buttons and spans, with secondary labels in clean silver (`rgba(255, 255, 255, 0.65)`) and vibrant electric blue (`#2563eb`) on hover.
+
+
+## 7. Content Accuracy, Timeline & Portfolio Streamlining
+- **Experience Timeline Alignment**:
+  - Corrected legacy/inaccurate timeline in Retro OS Experience tab (`_henry_os/src/components/showcase/Experience.tsx`) from `2023 - Present` to `2024 - Present`, accurately reflecting Vansh's transition following BCA graduation (2021–2024) into MCA (AI & Data Science, 2024–2026) and active open-source AI/agent engineering.
+- **De-cluttering Legacy Third-Party Sections**:
+  - Removed outdated third-party hobby sections (Music and Art FL Studio / pixel art remnants) from Retro OS (`Projects.tsx`, `VerticalNavbar.tsx`, and `ShowcaseExplorer.tsx`).
+  - Streamlined the Retro OS Projects portal to exclusively feature **Software & AI Engineering** (Fine-Tuned LLM Job Extractor, Cyclic LangGraph Multi-Agent Research System, Production RAG Legal Intelligence, and NetSentinel).
+  - Configured router fallbacks so legacy `/projects/music` and `/projects/art` seamlessly route to Software & AI Systems.
+- **Tagline & Copy Alignment (Website 2 Corridor Portfolio)**:
+  - Replaced template design boilerplate (*"Independent design engineer building stunning websites for ambitious startups and worldwide brands"*) with Vansh's authentic profile:
+    `"AI/ML Engineer & Creative Technologist specializing in autonomous multi-agent systems, LLM fine-tuning, and interactive 3D web applications."`
+  - Replaced boilerplate web agency claims in the About section with authentic AI/ML engineering narratives detailing multi-agent architectures, parameter-efficient fine-tuning (QLoRA), and high-throughput microservices.
+- **Production Bundle Synchronization**:
+  - Recompiled the Retro Windows 95 application (`npm run build` in `_henry_os`) into an optimized, zero-warning bundle (`main.f2649ea3.js`), deployed cleanly to `public/os/` alongside updated cache-busting references.
+

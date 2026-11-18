@@ -24,7 +24,7 @@ const Experience: React.FC<ExperienceProps> = (props) => {
                     <div style={styles.headerRow}>
                         <h3>AI/ML Engineer & Open Source Builder</h3>
                         <b>
-                            <p>2023 - Present</p>
+                            <p>2024 - Present</p>
                         </b>
                     </div>
                 </div>
