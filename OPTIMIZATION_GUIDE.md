@@ -160,3 +160,12 @@ The 3D rotating CRT corridor showcases four full-stack AI/ML engineering project
     - Logo & Barcode: Wireframe globe emblem with Vansh Sharma and Vansh Inc., authentic barcode with digits.
     - Footer: Engineered by Vansh Sharma
   - Applied with anti-aliased edge masking to preserve 100% of the original casing plastic bevels and corner drop-shadows with zero seam artifacts across all texture files (public/models/Computer/, public/room/, and _henry/).
+
+
+## Recursive Iframe Inception Fix (Monitor Menu Navigation)
+- **Problem**: When browsing Website 2 (Modern Corridor Portfolio) inside the 3D CRT monitor, clicking menu items (`HOME 01`, `ABOUT 02`, `CONTACT 03`, `ARTICLES`, `TOOLS`, `CREDITS`, or the header logo) triggered HTTP navigations to `/` or non-existent routes like `/about` and `/contact`. The dev server router defaulted to serving `index.html` (Website 1, 3D Desk Room) for those paths, resulting in a nested 3D desk room loading inside the PC's monitor screen (infinite room recursion).
+- **Solution**:
+  1. **Safety Inception Guard (`index.html`)**: Added a top-level guard `if (window.top !== window.self) window.location.replace('/portfolio/index.html');` to ensure the 3D isometric room can never be recursively nested inside an iframe.
+  2. **Single-Page Smooth Section Scroll (`public/portfolio/index.html`)**: Converted the menu links (`HOME 01`, `PROJECTS 02`, `ABOUT 03`, `CONTACT 04`) into in-page smooth-scroll handlers (`window.navigateToSection`) driving the Lenis smooth scroll engine to their exact progress offsets.
+  3. **Cleaned Dead Boilerplate Links**: Completely removed dummy placeholder links (`ARTICLES`, `TOOLS`, `CREDITS`) that had no corresponding sections and triggered route fallbacks.
+  4. **Global Click Interceptor**: Added a capture-phase click listener in `public/portfolio/index.html` intercepting any remaining relative links (`/`, `/about`, `/contact`, `/privacy`), preventing default iframe navigation and redirecting to the corresponding in-page section.
