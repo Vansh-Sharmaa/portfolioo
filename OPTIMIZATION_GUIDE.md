@@ -134,3 +134,9 @@ The 3D rotating CRT corridor showcases four full-stack AI/ML engineering project
 
 ### 4. Dual-Mode UX Bridge
 - Seamless communication between **Website 1 (Isometric 3D Room & Retro OS)** and **Website 2 (3D CRT Corridor Portfolio)** using `window.postMessage` event broadcasting and zero-reload transitions.
+
+### 5. Mobile & Touch Architecture Optimization
+- **Lenis `syncTouch` Activation**: In custom WebGL virtual scroll pipelines, default Lenis configurations set `syncTouch: false`, silently discarding all mobile `touchstart` and `touchmove` events. Configured `syncTouch: true` and `syncTouchLerp: 0.15` in `layout.astro_astro_type_script_index_2_lang.BGGVC-cu.js`, restoring 1:1 tactile momentum scrolling on iOS and Android devices (~570px scroll distance per swipe gesture).
+- **Responsive Header Engineering**: Replaced fixed 340px-wide overlay buttons that obstructed mobile viewports with responsive icon badges (`⇱` and `💾`) in the top navigation bar.
+- **Mobile Drawer Quick-Navigation**: Integrated full-width 1-tap navigation items (`⇱ Return to 3D Desk` and `💾 Retro Windows 95`) directly inside the mobile slide-out menu drawer (`#menu-list`) with 44px+ touch targets conforming to Apple HIG and Google Material guidelines.
+- **Zero Horizontal Overflow**: Verified `scrollWidth === clientWidth` across all standard mobile viewports (iPhone SE 375px, iPhone 14 390px, Pixel 7 412px, iPad 768px).

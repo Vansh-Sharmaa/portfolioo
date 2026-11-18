@@ -57,6 +57,9 @@ function osRewritePlugin() {
         if (req.url === '/os' || req.url === '/os/') {
           req.url = '/os/index.html';
         }
+        if (req.url === '/portfolio' || req.url === '/portfolio/') {
+          req.url = '/portfolio/index.html';
+        }
         next();
       });
     }
