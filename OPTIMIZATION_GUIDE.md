@@ -100,3 +100,36 @@ When speaking with senior engineers, weave in these industry-standard terms:
 
 ---
 *Created as part of the Vansh Sharma 3D Portfolio Architecture Documentation.*
+
+
+
+---
+
+## 🏛️ 5. Full Architecture & Project Integration Log
+*Everything integrated, engineered, and customized in this portfolio:*
+
+### 1. The 4 Production AI/ML Projects in Website 2
+The 3D rotating CRT corridor showcases four full-stack AI/ML engineering projects:
+
+| Card # | Original Key | Live Integrated Project | Core Tech Stack | Architectural Highlights |
+|---|---|---|---|---|
+| **01** | `salesforce-ai-trust-map` | **Intellecta: Autonomous Multi-Agent Research Engine** | `LangGraph` · `LangChain` · `Ollama` · `Llama 3.1` | Local-first cyclic multi-agent pipeline (Searcher, Scraper, Synthesizer, Critic) with dynamic revision loops and glassmorphism Streamlit UI. |
+| **02** | `triar` | **FileGenie: Intelligent Byte Forensics Platform** | `scikit-learn` · `RandomForest` · `FastAPI` · `React 18` | Byte-level classification using Shannon entropy, magic bytes, and ASCII distributions. Classifies extension-less/mislabeled files in < 1ms with 95%+ accuracy. |
+| **03** | `catalogue` | **Cineminds: Content-Based Recommender System** | `TF-IDF` · `Cosine Similarity` · `Python` · `Streamlit` | NLP vector space modeling across TMDB metadata (genres, keywords, cast, crew), calculating angular vector distances for top-5 recommendations. |
+| **04** | `revelium-milkmaid` | **LexAI: Legal Document Intelligence** | `RAG` · `LangChain` · `FAISS` · `Groq (LLaMA 3.1)` | Map-Reduce executive summarization (10,000+ words), semantic risk scoring, and automated compliance classification. |
+
+### 2. WebGL Texture Atlas & Shader Pipeline
+- **Atlas Resolution & Coordinate Alignment**: Each project card uses a custom composite texture atlas with 4 dedicated slide viewports (Hero cover, Architecture/Bytes, System Flow, Performance/Verification).
+- **Three.js UV Orientation**: WebGL textures default to `flipY = true`, whereas modern WebGL atlases use top-down UVs. Intercepted texture loaders in `render-app-CvdNAhmF.js` and `scene-BID6q2Fr.js` to enforce `flipY = false` and `colorSpace = sRGB`.
+- **KTX2 Bypassing**: Replaced complex asynchronous basis-transcoding with zero-latency image bitmaps, eliminating decompression overhead and decoder memory footprint on client browsers.
+
+### 3. Contact & Identity Streamlining
+- **Zero Broken Artifacts**: Cleared broken relative SVG `<img>` tags in the contact overlay that caused browser placeholder boxes.
+- **Professional Channel Curation**: Cleaned out legacy socials (`X/Twitter`, `Instagram`) and consolidated links to core engineering platforms:
+  - **LinkedIn**: [linkedin.com/in/vnxsh](https://linkedin.com/in/vnxsh)
+  - **GitHub**: [github.com/Vansh-Sharmaa](https://github.com/Vansh-Sharmaa)
+  - **Email**: [engagevansh@gmail.com](mailto:engagevansh@gmail.com)
+- **SEO & Structured Data**: Built complete Schema.org JSON-LD structured metadata for `Person` and `ItemList` (Selected Work) for search engine discoverability.
+
+### 4. Dual-Mode UX Bridge
+- Seamless communication between **Website 1 (Isometric 3D Room & Retro OS)** and **Website 2 (3D CRT Corridor Portfolio)** using `window.postMessage` event broadcasting and zero-reload transitions.
