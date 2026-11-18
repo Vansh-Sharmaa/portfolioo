@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import colors from '../../constants/colors';
-import twitterIcon from '../../assets/pictures/contact-twitter.png';
 import ghIcon from '../../assets/pictures/contact-gh.png';
 import inIcon from '../../assets/pictures/contact-in.png';
 import ResumeDownload from './ResumeDownload';
@@ -115,10 +114,6 @@ const Contact: React.FC<ContactProps> = (props) => {
                     <SocialBox
                         icon={inIcon}
                         link={'https://linkedin.com/in/vnxsh'}
-                    />
-                    <SocialBox
-                        icon={twitterIcon}
-                        link={'https://twitter.com/vanshsharma'}
                     />
                 </div>
             </div>
