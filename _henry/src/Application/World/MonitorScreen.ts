@@ -196,13 +196,13 @@ export default class MonitorScreen extends EventEmitter {
             }
         });
 
-        // Set iframe attributes - Load real 3D portfolio by default
-        iframe.src = '/portfolio/index.html';
+        // Set iframe attributes - Load Retro Windows 95 OS by default
+        iframe.src = '/os/index.html';
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('dev')) {
             iframe.src = 'http://localhost:3000/';
-        } else if (urlParams.has('os')) {
-            iframe.src = '/os/index.html';
+        } else if (urlParams.has('portfolio')) {
+            iframe.src = '/portfolio/index.html';
         }
         iframe.style.width = this.screenSize.width + 'px';
         iframe.style.height = this.screenSize.height + 'px';
